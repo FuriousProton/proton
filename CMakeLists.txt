@@ -2,8 +2,6 @@
 project(proton)
 cmake_minimum_required(VERSION 3.8)
 
-set(TOOLCHAIN D:/Programs/_MSYS2/mingw64/bin/cmake.exe)
-
 set(CMAKE_CXX_STANDARD 14)
 
 option(DEPENDENCY "Make a specific thing" OFF)
@@ -15,8 +13,7 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/module")
 set(INCLUDE_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/include")
 
 #Linking
-set(SOURCE_FILES src/main.cpp)
-
+set(SOURCE_FILES src/main.cpp src/interface/display/Display.cpp src/interface/display/Display.h)
 include(submodules.cmake)
 include(cmake/dependencies.cmake)
 

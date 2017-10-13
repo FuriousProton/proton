@@ -10,3 +10,6 @@
 [submodule "submodule/glbinding"]
 	path = submodule/glbinding
 	url = https://github.com/cginternals/glbinding
+[submodule "submodule/chaiscript"]
+	path = submodule/chaiscript
+	url = https://github.com/ChaiScript/ChaiScript
