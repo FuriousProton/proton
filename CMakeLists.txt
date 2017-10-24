@@ -13,7 +13,10 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/module")
 set(INCLUDE_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/include")
 
 #Linking
-set(SOURCE_FILES src/main.cpp src/interface/display/Display.cpp src/interface/display/Display.h)
+set(SOURCE_FILES src/main.cpp src/interface/display/Display.cpp
+        src/interface/display/Display.h src/engine/Proton.cpp src/engine/Proton.h
+        src/engine/DisplaySettings.h
+        src/engine/component/Transform.cpp src/engine/component/Transform.h)
 include(submodules.cmake)
 include(cmake/dependencies.cmake)
 

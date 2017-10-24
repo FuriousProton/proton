@@ -10,3 +10,17 @@
 #define FULLSCREEN 0x00
 #define FULLSCREEN_WINDOWED 0x01
 #define WINDOWED 0x02
+
+
+enum EVENT {
+    UPDATE,
+    RENDER,
+
+    KEYUP,
+    KEYDOWN,
+    KEYPRESS,
+    MOUSEUP,
+    MOUSEDOWN,
+    MOUSEPRESS,
+    MOUSEMOVE
+};

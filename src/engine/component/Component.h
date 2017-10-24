@@ -5,7 +5,23 @@
 #pragma once
 
 
-class Component {
+namespace proton{
+    class Entity;
 
-};
+    class Component {
+    private:
+        Entity *mpEntity;
+    public:
+
+        virtual void start();
+        virtual void update();
+        virtual void end();
+
+        Entity &getEntity();
+
+    protected:
+        void setComoponent(Entity *e);
+    };
+
+}
 

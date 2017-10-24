@@ -10,7 +10,7 @@
 
 namespace proton {
     Display::Display(int width, int height, const char *title) : mWidth(width), mHeight(height), mTitle(title),
-                                                                 mWindow(nullptr) {
+                                                                 mpWindow(nullptr) {
 
     }
 
@@ -26,16 +26,16 @@ namespace proton {
             return false;
         }
 
-        mMonitors = glfwGetMonitors(&monitorCount);
+        mpMonitors = glfwGetMonitors(&monitorCount);
         activeMonitor = 0;
         //@TODO create manager for the monitor and share parameter
-        mWindow = glfwCreateWindow(mWidth, mHeight, mTitle, nullptr, nullptr);
-        if (!mWindow) {
+        mpWindow = glfwCreateWindow(mWidth, mHeight, mTitle, nullptr, nullptr);
+        if (!mpWindow) {
             LOG("ERROR", "Failed to create the window!");
             return false;
         }
-        glfwMakeContextCurrent(mWindow);
-        glfwSetWindowUserPointer(mWindow, this);
+        glfwMakeContextCurrent(mpWindow);
+        glfwSetWindowUserPointer(mpWindow, this);
 //region event callbacks
         auto mousecallback = [](GLFWwindow *w, int a, int b, int c) {
             static_cast<Display *>(glfwGetWindowUserPointer(w))->mouse_button_callback(a, b, c);
@@ -58,10 +58,10 @@ namespace proton {
         };
 
 //        glfwSetMonitorCallback(monitorcallback);
-        glfwSetMouseButtonCallback(mWindow, mousecallback);
-        glfwSetWindowSizeCallback(mWindow, winresize);
-        glfwSetKeyCallback(mWindow, keycallback);
-        glfwSetCursorPosCallback(mWindow, cursorcallback);
+        glfwSetMouseButtonCallback(mpWindow, mousecallback);
+        glfwSetWindowSizeCallback(mpWindow, winresize);
+        glfwSetKeyCallback(mpWindow, keycallback);
+        glfwSetCursorPosCallback(mpWindow, cursorcallback);
 //endregion
 
         glbinding::Binding::initialize();
@@ -72,14 +72,14 @@ namespace proton {
 
     void Display::update() {
         glFlush();
-        glfwSwapBuffers(mWindow);
+        glfwSwapBuffers(mpWindow);
         glfwPollEvents();
         glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
     }
 
 
     bool Display::closed() {
-        return glfwWindowShouldClose(mWindow) == 1;
+        return glfwWindowShouldClose(mpWindow) == 1;
     }
 
     void Display::cursor_position_callback(double xpos, double ypos) {
@@ -100,7 +100,7 @@ namespace proton {
     }
 
     void Display::setCursor(bool enabled) {
-        glfwSetInputMode(mWindow, GLFW_CURSOR, enabled ? GLFW_CURSOR_NORMAL : GLFW_CURSOR_DISABLED);
+        glfwSetInputMode(mpWindow, GLFW_CURSOR, enabled ? GLFW_CURSOR_NORMAL : GLFW_CURSOR_DISABLED);
     }
 
     void Display::resize(int width, int height) {
@@ -110,20 +110,21 @@ namespace proton {
     }
 
     void Display::setFullscreenType(char fullscreenType) {
-        const GLFWvidmode *mode = glfwGetVideoMode(mMonitors[activeMonitor]);
+        const GLFWvidmode *mode = glfwGetVideoMode(mpMonitors[activeMonitor]);
 
         switch (fullscreenType) {
             case FULLSCREEN:
                 LOG("ERROR","Fullscreen mode not implemented...yet...");
                 break;
+            default:
             case WINDOWED:
-                glfwSetWindowSize(mWindow, mWidth, mHeight);
-                glfwSetWindowPos(mWindow, (int)floor((mode->width-mWidth)/2.0), (int)floor((mode->height-mHeight)/2.0));
+                glfwSetWindowSize(mpWindow, mWidth, mHeight);
+                glfwSetWindowPos(mpWindow, (int)floor((mode->width-mWidth)/2.0), (int)floor((mode->height-mHeight)/2.0));
                 break;
             case FULLSCREEN_WINDOWED:
-                glfwSetWindowSize(mWindow, mode->width, mode->height);
+                glfwSetWindowSize(mpWindow, mode->width, mode->height);
                 resize(mode->width,mode->height);
-                glfwSetWindowPos(mWindow, 0, 0);
+                glfwSetWindowPos(mpWindow, 0, 0);
                 break;
         }
     }
@@ -132,8 +133,8 @@ namespace proton {
         if (monitorCount < index || index < 0) {
             LOG("ERROR", "Cannot set monitor to " << index);
         } else {
-            const GLFWvidmode *mode = glfwGetVideoMode(mMonitors[index]);
-            glfwSetWindowMonitor(mWindow, mMonitors[index], 0, 0, mode->width, mode->height, mode->refreshRate);
+            const GLFWvidmode *mode = glfwGetVideoMode(mpMonitors[index]);
+            glfwSetWindowMonitor(mpWindow, mpMonitors[index], 0, 0, mode->width, mode->height, mode->refreshRate);
         }
     }
 

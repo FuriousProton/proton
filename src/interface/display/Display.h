@@ -9,8 +9,8 @@ class GLFWmonitor;
 namespace proton {
     class Display {
     private:
-        GLFWwindow *mWindow;
-        GLFWmonitor **mMonitors;
+        GLFWwindow *mpWindow;
+        GLFWmonitor **mpMonitors;
         int monitorCount;
         int activeMonitor;
 

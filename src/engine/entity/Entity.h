@@ -5,7 +5,11 @@
 #pragma once
 
 
-class Entity {
+namespace proton{
 
-};
+    class Entity {
+    public:
+        void getName(){}
+    };
 
+}

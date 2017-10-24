@@ -1,46 +1,26 @@
 #include <GLFW/glfw3.h>
 
-#include "interface/display/Display.h"
+#include "utility.h"
+#include "engine/DisplaySettings.h"
+#include "engine/Proton.h"
 
-int main(void)
+int main()
 {
-    using namespace proton;
-    auto *d = new Display(1000,800,"Game");
-    d->prepare();
-    while (!d->closed()){
-        d->update();
-    }
-//
-//    GLFWwindow* window;
-//
-//    /* Initialize the library */
-//    if (!glfwInit())
-//        return -1;
-//
-//    /* Create a windowed mode window and its OpenGL context */
-//    window = glfwCreateWindow(640, 480, "Hello World", NULL, NULL);
-//    if (!window)
-//    {
-//        glfwTerminate();
-//        return -1;
-//    }
-//
-//    /* Make the window's context current */
-//    glfwMakeContextCurrent(window);
-//
-//    /* Loop until the user closes the window */
-//    while (!glfwWindowShouldClose(window))
-//    {
-//        /* Render here */
-//        glClear(GL_COLOR_BUFFER_BIT);
-//
-//        /* Swap front and back buffers */
-//        glfwSwapBuffers(window);
-//
-//        /* Poll for and process events */
-//        glfwPollEvents();
-//    }
-//
-//    glfwTerminate();
+
+    DisplaySettings dSettings;
+    dSettings.title="Game";
+    Proton p{};
+    p.createDisplay(dSettings);
+    glBegin(GL_TRIANGLES);
+    glColor3b(10,10,10);
+
+    glVertex2d(-0.9,-0.9);
+    glVertex2d(0.9,-0.9);
+    glVertex2d(0,0.9);
+
+    glEnd();
+    p.startLoop();
+
+
     return 0;
 }
