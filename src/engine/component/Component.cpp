@@ -3,3 +3,13 @@
 //
 
 #include "Component.h"
+namespace proton{
+    void Component::update() {
+    }
+
+    void Component::end() {
+    }
+
+    void Component::start() {
+    }
+}

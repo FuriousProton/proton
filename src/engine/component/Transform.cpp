@@ -3,8 +3,7 @@
 //
 
 #include "Transform.h"
-#include <glm/gtx/transform.hpp>
-#include <glm/gtx/quaternion.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 namespace proton{
     void Transform::move(double x, double y, double z) {
@@ -63,7 +62,7 @@ namespace proton{
     glm::mat4 Transform::getTransformationMatrix() {
         if(mDirty){
             mDirty = false;
-            glm::mat4 model = glm::toMat4(mRotation);
+            glm::mat4 model = glm::mat4_cast(mRotation);
             model*=glm::translate(glm::mat4(1.0f),mTransform);
             model*=glm::scale(glm::mat4(1.0f),mScale);
             mModel=model;
