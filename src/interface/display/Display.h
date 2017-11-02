@@ -27,6 +27,7 @@ namespace proton {
         void update();
 
         bool closed();
+        void clear();
 
         /**
          * Switching from fullscreen to windowed, or from windowed to fullscreen

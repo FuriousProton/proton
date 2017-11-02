@@ -9,8 +9,8 @@ namespace proton{
     class Entity;
 
     class Component {
-    private:
-        Entity *mpEntity;
+    protected:
+        Entity *mpEntity= nullptr;
     public:
 
         virtual void start();
@@ -20,7 +20,7 @@ namespace proton{
         Entity &getEntity();
 
     protected:
-        void setComoponent(Entity *e);
+        void addEntity(Entity *e);
     };
 
 }

@@ -13,8 +13,9 @@ namespace proton {
         glm::vec3 mTransform;
         glm::vec3 mScale;
         glm::mat4 mModel;
-        bool mDirty= true;
+        bool mDirty;
     public:
+        Transform();
         void update() override;
         void end() override;
         void start() override;
@@ -40,6 +41,8 @@ namespace proton {
 
         glm::mat4 getTransformationMatrix();
 
+    private:
+        void setDirty();
     };
 };
 

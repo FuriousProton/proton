@@ -18,28 +18,33 @@ namespace proton{
     public:
         void load(std::string *shaders);
 
-        void loadUniform1f(const GLchar *name, float value);
+        void bind();
+        void unbind();
+
+        void loadData();
+
+        void loadUniform1f(const char *name, float value);
         void loadUniform1i(const char *name, int value);
 
-        void loadUniform2f(const GLchar *name, const glm::vec2& value);
-        void loadUniform3f(const GLchar *name, const glm::vec3& value);
-        void loadUniform4f(const GLchar *name, const glm::vec4& value);
+        void loadUniform2f(const char *name, const glm::vec2& value);
+        void loadUniform3f(const char *name, const glm::vec3& value);
+        void loadUniform4f(const char *name, const glm::vec4& value);
 
-        void loadUniformMat4f(const GLchar *name, const glm::mat4& uniform);
-        void loadUniformMat4f(const GLchar *name, glm::mat4& uniform);
+        void loadUniformMat4f(const char *name, const glm::mat4& uniform);
+        void loadUniformMat4f(const char *name, glm::mat4& uniform);
 
-        void loadUniform1f(GLuint location, float value);
-        void loadUniform1i(GLuint location, int value);
+        void loadUniform1f(unsigned int location, float value);
+        void loadUniform1i(unsigned int location, int value);
 
-        void loadUniform2f(GLuint location, const glm::vec2& value);
-        void loadUniform3f(GLuint location, const glm::vec3& value);
-        void loadUniform4f(GLuint location, const glm::vec4& value);
+        void loadUniform2f(unsigned int location, const glm::vec2& value);
+        void loadUniform3f(unsigned int location, const glm::vec3& value);
+        void loadUniform4f(unsigned int location, const glm::vec4& value);
 
-        void loadUniformMat4f(GLuint location, const glm::mat4& uniform);
-        void loadUniformMat4f(GLuint location, glm::mat4& uniform);
+        void loadUniformMat4f(unsigned int location, const glm::mat4& uniform);
+        void loadUniformMat4f(unsigned int location, glm::mat4& uniform);
     private:
         unsigned int buildShader(std::string &content, GLenum shaderType);
-        GLuint getUniformLocation(const char *name);
+        unsigned int getUniformLocation(const char *name);
     };
 }
 

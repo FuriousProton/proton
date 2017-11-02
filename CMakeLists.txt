@@ -18,12 +18,12 @@ set(SOURCE_FILES src/main.cpp src/interface/display/Display.cpp
         src/engine/Proton.h src/engine/DisplaySettings.h
         src/engine/component/Transform.cpp src/engine/component/Transform.h
         src/interface/io/FileLoader.cpp src/interface/io/FileLoader.h
-        src/engine/component/Material.cpp src/engine/component/Material.h
+        src/engine/component/Renderer.cpp src/engine/component/Renderer.h
         src/interface/graphics/Shader.cpp src/interface/graphics/Shader.h
         src/interface/graphics/Buffer.cpp src/interface/graphics/Buffer.h
         src/engine/component/Component.cpp src/engine/component/Component.h
         src/engine/entity/Entity.cpp src/engine/entity/Entity.h
-        )
+        src/interface/graphics/IndexBuffer.cpp src/interface/graphics/IndexBuffer.h src/interface/graphics/VertexArray.cpp src/interface/graphics/VertexArray.h)
 include(submodules.cmake)
 include(cmake/dependencies.cmake)
 

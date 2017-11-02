@@ -13,3 +13,6 @@
 [submodule "submodule/chaiscript"]
 	path = submodule/chaiscript
 	url = https://github.com/ChaiScript/ChaiScript
+[submodule "submodule/assimp"]
+	path = submodule/assimp
+	url = https://github.com/assimp/assimp

@@ -74,7 +74,6 @@ namespace proton {
         glFlush();
         glfwSwapBuffers(mpWindow);
         glfwPollEvents();
-        glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
     }
 
 
@@ -136,6 +135,10 @@ namespace proton {
             const GLFWvidmode *mode = glfwGetVideoMode(mpMonitors[index]);
             glfwSetWindowMonitor(mpWindow, mpMonitors[index], 0, 0, mode->width, mode->height, mode->refreshRate);
         }
+    }
+
+    void Display::clear() {
+        glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
     }
 
 }

@@ -72,45 +72,45 @@ namespace proton {
         return shaderID;
     }
 
-    GLuint Shader::getUniformLocation(const char *name) {
+    unsigned int Shader::getUniformLocation(const char *name) {
         using namespace gl;
         if(mUniforms.find(name) == mUniforms.end()){
             mUniforms[name]=glGetUniformLocation(id,name);
         }
         LOG("SHADER_LOADER", "Requesting uniform "<<name<<" (#"<<mUniforms[name]<<")");
-        return static_cast<GLuint>(mUniforms[name]);
+        return static_cast<unsigned int>(mUniforms[name]);
     }
 
 
-    void Shader::loadUniform1f(GLuint location, float value) {
+    void Shader::loadUniform1f(unsigned int location, float value) {
         glUniform1f(location, value);
     }
 
-    void Shader::loadUniform1i(GLuint location, int value) {
+    void Shader::loadUniform1i(unsigned int location, int value) {
         glUniform1i(location, value);
     }
 
-    void Shader::loadUniform2f(GLuint location, const glm::vec2& value) {
+    void Shader::loadUniform2f(unsigned int location, const glm::vec2& value) {
         glUniform2f(location, value.x, value.y);
     }
 
-    void Shader::loadUniform3f(GLuint location, const glm::vec3& value) {
+    void Shader::loadUniform3f(unsigned int location, const glm::vec3& value) {
         glUniform3f(location, value.x, value.y, value.z);
     }
 
-    void Shader::loadUniform4f(GLuint location, const glm::vec4& value) {
+    void Shader::loadUniform4f(unsigned int location, const glm::vec4& value) {
         glUniform4f(location, value.x, value.y, value.z, value.w);
     }
 
-    void Shader::loadUniformMat4f(GLuint location, const glm::mat4& uniform) {
+    void Shader::loadUniformMat4f(unsigned int location, const glm::mat4& uniform) {
         glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(uniform));
     }
 
-    void Shader::loadUniformMat4f(GLuint location, glm::mat4& uniform) {
+    void Shader::loadUniformMat4f(unsigned int location, glm::mat4& uniform) {
         glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(uniform));
     }
 
-    void Shader::loadUniform1f(const GLchar *name, float value) {
+    void Shader::loadUniform1f(const char *name, float value) {
         loadUniform1f(getUniformLocation(name), value);
     }
 
@@ -118,22 +118,33 @@ namespace proton {
         loadUniform1i(getUniformLocation(name), value);
     }
 
-    void Shader::loadUniform2f(const GLchar *name, const glm::vec2& value) {
+    void Shader::loadUniform2f(const char *name, const glm::vec2& value) {
         loadUniform2f(getUniformLocation(name), value);
     }
 
-    void Shader::loadUniform3f(const GLchar *name, const glm::vec3& value) {
+    void Shader::loadUniform3f(const char *name, const glm::vec3& value) {
         loadUniform3f(getUniformLocation(name), value);
     }
 
-    void Shader::loadUniform4f(const GLchar *name, const glm::vec4& value) {
+    void Shader::loadUniform4f(const char *name, const glm::vec4& value) {
         loadUniform4f(getUniformLocation(name), value);
     }
 
-    void Shader::loadUniformMat4f(const GLchar *name, const glm::mat4& uniform) {
+    void Shader::loadUniformMat4f(const char *name, const glm::mat4& uniform) {
         loadUniformMat4f(getUniformLocation(name),uniform);
     }
-    void Shader::loadUniformMat4f(const GLchar *name, glm::mat4& uniform) {
+    void Shader::loadUniformMat4f(const char *name, glm::mat4& uniform) {
         loadUniformMat4f(getUniformLocation(name), uniform);
+    }
+
+    void Shader::bind() {
+        glUseProgram(id);
+    }
+    void Shader::unbind() {
+        glUseProgram(0);
+    }
+
+    void Shader::loadData() {
+        LOG("SHADER_ERR","NOT IMPLEMENTED");
     }
 }

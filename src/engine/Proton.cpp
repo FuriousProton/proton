@@ -18,6 +18,7 @@ void Proton::createDisplay(DisplaySettings &displaySettings) {
 
 void Proton::startLoop() {
     while (!mDisplay->closed()){
+        mDisplay->clear();
 
         mDisplay->update();
     }

@@ -12,4 +12,12 @@ namespace proton{
 
     void Component::start() {
     }
+
+    void Component::addEntity(Entity *e) {
+        mpEntity=e;
+    }
+
+    Entity &Component::getEntity() {
+        return *mpEntity;
+    }
 }

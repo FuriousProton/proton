@@ -4,13 +4,19 @@
 
 #include "Transform.h"
 #include <glm/gtc/matrix_transform.hpp>
+#include "../entity/Entity.h"
 
-namespace proton{
+namespace proton {
+
+    Transform::Transform() = default {
+        mDirty=true;
+    }
+
     void Transform::move(double x, double y, double z) {
-        mDirty = true;
-        mTransform.x+=x;
-        mTransform.y+=y;
-        mTransform.z+=z;
+        setDirty();
+        mTransform.x += x;
+        mTransform.y += y;
+        mTransform.z += z;
     }
 
 
@@ -23,12 +29,11 @@ namespace proton{
     }
 
 
-
     void Transform::scale(double x, double y, double z) {
-        mDirty = true;
-        mScale.x+=x;
-        mScale.y+=y;
-        mScale.z+=z;
+        setDirty();
+        mScale.x += x;
+        mScale.y += y;
+        mScale.z += z;
     }
 
     void Transform::scale(double factor) {
@@ -40,32 +45,44 @@ namespace proton{
     }
 
     void Transform::scale(glm::vec3 factor) {
-        mDirty = true;
+        setDirty();
         scale(factor.x, factor.y, factor.z);
     }
 
     void Transform::rotate(glm::quat quaternion) {
-        mDirty = true;
-        mRotation+=quaternion;
+        setDirty();
+        mRotation += quaternion;
     }
 
     void Transform::rotate(glm::vec3 rotation) {
-        mDirty = true;
+        setDirty();
         glm::quat quat = glm::quat(rotation);
-        mRotation+=quat;
+        mRotation += quat;
     }
 
     glm::vec3 Transform::eulerRotation() {
         return glm::eulerAngles(mRotation);
     }
 
+    void Transform::setDirty() {
+        mDirty = true;
+        for (auto &child : mpEntity->mpChildList) {
+            child->transform().setDirty();
+        }
+    }
+
     glm::mat4 Transform::getTransformationMatrix() {
-        if(mDirty){
+        if (mDirty) {
             mDirty = false;
             glm::mat4 model = glm::mat4_cast(mRotation);
-            model*=glm::translate(glm::mat4(1.0f),mTransform);
-            model*=glm::scale(glm::mat4(1.0f),mScale);
-            mModel=model;
+            model *= glm::translate(glm::mat4(1.0f), mTransform);
+            model *= glm::scale(glm::mat4(1.0f), mScale);
+            if(mpEntity->parent()!= nullptr){
+                mModel = mpEntity->parent()->transform().mModel;
+                mModel *= model;
+            }else{
+                mModel=model;
+            }
         }
         return mModel;
     }
@@ -81,5 +98,6 @@ namespace proton{
     void Transform::start() {
         Component::start();
     }
+
 
 }
