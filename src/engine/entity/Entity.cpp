@@ -9,21 +9,27 @@
 
 namespace proton {
 
-    Entity::Entity() = default {
+    Entity::Entity() {
         mpRenderer= nullptr;
         mpTransform = new Transform();
     }
 
-    Entity::~Entity() = default {
+    Entity::~Entity() {
         delete mpTransform;
-        delete[] mpComponentList;
+        for(Component *c : mpComponentList){
+            delete(c);
+        }
+        for(Entity *e : mpChildList){
+            delete(e);
+        }
     }
 
-    void Entity::addComponent(Component &comp) {
-        if(nullptr != dynamic_cast<Renderer*>(&comp)){
-            mpRenderer= static_cast<Renderer*>(&comp);
+    void Entity::addComponent(Component *comp) {
+        comp->setEntity(this);
+        if(nullptr != dynamic_cast<Renderer*>(comp)){
+            mpRenderer= dynamic_cast<Renderer*>(comp);
         }else{
-            mpComponentList.push_back(&comp);
+            mpComponentList.push_back(comp);
         }
     }
 

@@ -12,14 +12,16 @@ namespace proton{
     }
 
     VertexArray::~VertexArray() {
-        delete[] mBufferList;
+        for (Buffer *b : mBufferList) {
+            delete(b);
+        }
     }
 
     void VertexArray::addBuffer(Buffer *buffer, unsigned int index) {
         bind();
         buffer->bind();
         glEnableVertexAttribArray(index);
-        glVertexAttribPointer(index, buffer->getComponentCount(), GL_FLOAT, GL_FALSE, 0,0,);
+        glVertexAttribPointer(index, buffer->getComponentCount(), GL_FLOAT, GL_FALSE, 0, nullptr);
         buffer->unbind();
         unbind();
     }

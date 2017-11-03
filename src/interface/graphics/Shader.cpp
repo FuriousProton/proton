@@ -5,7 +5,6 @@
 #include "Shader.h"
 #include <glbinding/gl/gl.h>
 #include <vector>
-#include <string>
 #include "../../utility.h"
 
 namespace proton {

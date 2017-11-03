@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include "Component.h"
 
 namespace proton {
     class Shader;

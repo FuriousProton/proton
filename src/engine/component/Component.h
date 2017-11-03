@@ -4,23 +4,23 @@
 
 #pragma once
 
+#include "../entity/Entity.h"
 
-namespace proton{
-    class Entity;
-
+namespace proton {
     class Component {
     protected:
-        Entity *mpEntity= nullptr;
+        Entity *mpEntity{};
     public:
 
         virtual void start();
+
         virtual void update();
+
         virtual void end();
 
         Entity &getEntity();
 
-    protected:
-        void addEntity(Entity *e);
+        void setEntity(Entity *e);
     };
 
 }

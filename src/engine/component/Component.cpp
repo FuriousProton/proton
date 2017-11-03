@@ -13,7 +13,7 @@ namespace proton{
     void Component::start() {
     }
 
-    void Component::addEntity(Entity *e) {
+    void Component::setEntity(Entity *e) {
         mpEntity=e;
     }
 

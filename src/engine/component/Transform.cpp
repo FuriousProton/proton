@@ -8,7 +8,7 @@
 
 namespace proton {
 
-    Transform::Transform() = default {
+    Transform::Transform() {
         mDirty=true;
     }
 

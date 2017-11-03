@@ -22,7 +22,7 @@ namespace proton{
         ~Entity();
         Entity * parent();
         Transform &transform();
-        void addComponent(Component &comp);
+        void addComponent(Component *comp);
         void addChild(Entity &child);
 
     };

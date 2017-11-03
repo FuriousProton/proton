@@ -4,6 +4,7 @@
 
 #include "Renderer.h"
 #include "Component.h"
+#include "Transform.h"
 #include <glbinding/gl/gl.h>
 #include "../../interface/io/FileLoader.h"
 #include "../../interface/graphics/Shader.h"
@@ -23,6 +24,7 @@ namespace proton{
 
     void Renderer::render() {
         mpShader->bind();
+        mpShader->loadUniformMat4f("mvp.model",mpEntity->transform().getTransformationMatrix());
         //@TODO setting up matrices
         mpShader->loadData();
 
