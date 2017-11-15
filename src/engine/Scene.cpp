@@ -7,12 +7,13 @@
 #include "entity/Entity.h"
 #include "entity/Camera.h"
 #include "../utility.h"
-
+Scene *Scene::activeScene= nullptr;
 Scene::Scene() {
     mMainCamera = -1;
 }
 
 Scene::~Scene() {
+    using namespace proton;
     for (Camera *c:mpCameraList) {
         delete (c);
     }
@@ -23,21 +24,31 @@ Scene::~Scene() {
 
 void Scene::activate() {
     LOG("Scene", "Scene activated");
-    activeScene = this;
+    Scene::activeScene = this;
 }
 
 void Scene::addEntity(proton::Entity *e) {
+    using namespace proton;
+    LOG("Scene","Adding entity");
     if (nullptr != dynamic_cast<Camera *>(e)) {
+
+        LOG("Scene","Adding camera");
         if (mMainCamera < 0) {
+
+            LOG("Scene","settign to main camera");
             mMainCamera = 0;
         }
         mpCameraList.push_back(dynamic_cast<Camera *>(e));
     } else {
+
+        LOG("Scene","Not camera");
         mpEntityList.push_back(e);
     }
 }
 
 void Scene::removeEntity(proton::Entity *e) {
+    using namespace proton;
+
     if (nullptr != dynamic_cast<Camera *>(e)) {
         if (mpCameraList.size() == 1) {
             mMainCamera = -1;
@@ -45,7 +56,7 @@ void Scene::removeEntity(proton::Entity *e) {
             mpCameraList.pop_back();
         } else {
             for (int i = 0; i < mpCameraList.size(); i++) {
-                if (&(mpCameraList[i]) == &e) {
+                if ((mpCameraList[i]) == e) {
                     LOG("Info", "Camera removed");
                     mpCameraList.erase(mpCameraList.begin() + i);
                     break;
@@ -54,11 +65,18 @@ void Scene::removeEntity(proton::Entity *e) {
         }
     } else {
         for (int i = 0; i < mpEntityList.size(); i++) {
-            if (&(mpEntityList[i]) == &e) {
+            if ((mpEntityList[i]) == e) {
                 LOG("Info", "Entity removed");
                 mpEntityList.erase(mpEntityList.begin() + i);
                 break;
             }
         }
     }
+}
+
+proton::Camera *Scene::mainCamera() {
+    if(mMainCamera>=0 && mpCameraList.size()>=mMainCamera){
+        return mpCameraList[mMainCamera];
+    }
+    return nullptr;
 }

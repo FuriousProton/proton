@@ -29,6 +29,9 @@ namespace proton {
         mpMonitors = glfwGetMonitors(&monitorCount);
         activeMonitor = 0;
         //@TODO create manager for the monitor and share parameter
+
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR,4);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR,6);
         mpWindow = glfwCreateWindow(mWidth, mHeight, mTitle, nullptr, nullptr);
         if (!mpWindow) {
             LOG("ERROR", "Failed to create the window!");
@@ -65,6 +68,7 @@ namespace proton {
 //endregion
 
         glbinding::Binding::initialize();
+        LOG("OpenGL version",glGetString(GL_VERSION));
 
         return true;
     }

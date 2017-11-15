@@ -9,10 +9,16 @@
 
 namespace proton {
 
-    Entity::Entity() {
+    Entity::Entity():mpParent(nullptr) {
+        setup();
+    }
+
+    void Entity::setup(){
         mpRenderer= nullptr;
         mpTransform = new Transform();
+        mpTransform->setEntity(this);
     }
+
 
     Entity::~Entity() {
         delete mpTransform;
@@ -38,7 +44,9 @@ namespace proton {
     }
 
     Entity * Entity::parent() {
-        return mpParent;
+        if(mpParent)
+            return mpParent;
+        return nullptr;
     }
 
     void Entity::addChild(Entity &child) {

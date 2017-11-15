@@ -11,6 +11,9 @@
 #include "../../interface/graphics/VertexArray.h"
 #include "../../interface/graphics/IndexBuffer.h"
 #include "../../interface/graphics/Buffer.h"
+#include "../Scene.h"
+#include "../entity/Camera.h"
+#include "../../utility.h"
 
 namespace proton{
     using namespace gl;
@@ -24,8 +27,18 @@ namespace proton{
 
     void Renderer::render() {
         mpShader->bind();
-        mpShader->loadUniformMat4f("mvp.model",mpEntity->transform().getTransformationMatrix());
-        //@TODO setting up matrices
+        if(Scene::activeScene){
+            if(Scene::activeScene->mainCamera()){
+                mpShader->loadUniformMat4f("mvp.view",Scene::activeScene->mainCamera()->getViewMatrix());
+                mpShader->loadUniformMat4f("mvp.projection",Scene::activeScene->mainCamera()->getProjectionMatrix());
+                mpShader->loadUniformMat4f("mvp.model",mpEntity->transform().getTransformationMatrix());
+            } else{
+                LOG("ERROR","No main camera added");
+            }
+        } else{
+            LOG("ERROR","No scene loaded");
+        }
+        //@TODO setting up additional matrices and textures
         mpShader->loadData();
 
         mpVertexArray->bind();

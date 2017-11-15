@@ -5,7 +5,11 @@
 #include "engine/Proton.h"
 #include "engine/entity/Entity.h"
 #include "engine/component/Renderer.h"
-
+#include "engine/Scene.h"
+#include "interface/graphics/IndexBuffer.h"
+#include "interface/graphics/VertexArray.h"
+#include "interface/graphics/Buffer.h"
+#include "engine/entity/Camera.h"
 
 int main()
 {
@@ -14,20 +18,30 @@ int main()
     DisplaySettings dSettings;
     dSettings.title="Game";
     Proton p{};
+    auto *scene = new Scene();
     p.createDisplay(dSettings);
-    glBegin(GL_TRIANGLES);
-    glColor3b(10,10,10);
-
+    auto *c = new Camera(800,600,70,.01f,1000);
     auto *e = new Entity();
     auto *r = new Renderer("simple.shader");
-
+    scene->addEntity(c);
+#define IBO_LEN 3
+    unsigned int indexes[IBO_LEN]={
+            0,2,1
+    };
+    IndexBuffer ibo(indexes,IBO_LEN);
+    VertexArray vao;
+#define VBO_LEN 9
+    float vert[VBO_LEN]={
+            -0.5f,0,0,
+            0.5f,0,0,
+            0,0.5f,0
+    };
+    Buffer verticles(vert,VBO_LEN,3);
+    vao.addBuffer(&verticles,0);
+    r->setModel(&ibo,&vao);
     e->addComponent(r);
-
-    glVertex2d(-0.9,-0.9);
-    glVertex2d(0.9,-0.9);
-    glVertex2d(0,0.9);
-
-    glEnd();
+    scene->addEntity(e);
+    scene->activate();
     p.startLoop();
 
 

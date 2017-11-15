@@ -12,20 +12,20 @@ namespace proton{
 }
 
 class Scene {
-    using namespace proton;
 private:
-    std::vector<Entity *> mpEntityList;
-    std::vector<Camera *> mpCameraList;
     int mMainCamera;
 public:
+    std::vector<proton::Entity *> mpEntityList;
+    std::vector<proton::Camera *> mpCameraList;
     static Scene *activeScene;
 
 public:
     Scene();
     ~Scene();
     void activate();
+    proton::Camera *mainCamera();
 
-    void addEntity(Entity *e);
-    void removeEntity(Entity *e);
+    void addEntity(proton::Entity *e);
+    void removeEntity(proton::Entity *e);
 };
 

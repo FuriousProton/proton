@@ -38,6 +38,9 @@ namespace proton {
         void rotate(glm::quat quaternion);
         void rotate(glm::vec3 rotation);
         glm::vec3 eulerRotation();
+        glm::quat rotation();
+        glm::vec3 position();
+
 
         glm::mat4 getTransformationMatrix();
 

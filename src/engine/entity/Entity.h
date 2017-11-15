@@ -14,12 +14,15 @@ namespace proton{
     protected:
         Entity *mpParent;
         Transform *mpTransform;
+
+        virtual void setup();
+
     public:
         std::vector<Entity*> mpChildList;
         std::vector<Component*> mpComponentList;
         Renderer *mpRenderer;
         Entity();
-        ~Entity();
+        virtual ~Entity();
         Entity * parent();
         Transform &transform();
         void addComponent(Component *comp);

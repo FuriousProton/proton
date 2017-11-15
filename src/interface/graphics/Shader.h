@@ -7,15 +7,23 @@
 #include <string>
 #include <glbinding/gl/gl.h>
 #include <glm/gtc/type_ptr.hpp>
-#include <map>
+#include <vector>
 
 namespace proton{
+    struct Uniform{
+        const char* key;
+        int ID;
+        Uniform(const char* _key,int _id):key(_key),ID(_id){};
+    };
+
     using namespace gl;
     class Shader {
     private:
             unsigned int id;
-            std::map<const char*,int> mUniforms;
+            std::vector<Uniform*> mUniforms;
     public:
+
+        Shader();
         void load(std::string *shaders);
 
         void bind();
@@ -44,7 +52,7 @@ namespace proton{
         void loadUniformMat4f(unsigned int location, glm::mat4& uniform);
     private:
         unsigned int buildShader(std::string &content, GLenum shaderType);
-        unsigned int getUniformLocation(const char *name);
+        int getUniformLocation(const char *name);
     };
 }
 

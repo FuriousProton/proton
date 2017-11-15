@@ -8,7 +8,7 @@
 
 namespace proton {
 
-    Transform::Transform() {
+    Transform::Transform():mRotation(glm::quat(glm::vec3(0,0,0))) {
         mDirty=true;
     }
 
@@ -60,6 +60,9 @@ namespace proton {
         mRotation += quat;
     }
 
+    glm::quat Transform::rotation() {
+        return mRotation;
+    }
     glm::vec3 Transform::eulerRotation() {
         return glm::eulerAngles(mRotation);
     }
@@ -97,6 +100,10 @@ namespace proton {
 
     void Transform::start() {
         Component::start();
+    }
+
+    glm::vec3 Transform::position() {
+        return mTransform;
     }
 
 
