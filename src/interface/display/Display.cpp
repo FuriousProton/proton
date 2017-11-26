@@ -86,20 +86,20 @@ namespace proton {
     }
 
     void Display::cursor_position_callback(double xpos, double ypos) {
-        LOG("MOUSE", "MOVE X: " << xpos << "; Y: " << ypos);
+ //       LOG("MOUSE", "MOVE X: " << xpos << "; Y: " << ypos);
     }
 
     void Display::key_callback(int key, int scancode, int action, int mods) {
-        LOG("KEYBOARD", "KEY: " << key << " SCAN: " << scancode << " ACTION: " << action);
+//        LOG("KEYBOARD", "KEY: " << key << " SCAN: " << scancode << " ACTION: " << action);
     }
 
     void Display::mouse_button_callback(int button, int action, int mods) {
-        LOG("MOUSE", "CLICK");
+ //       LOG("MOUSE", "CLICK");
     }
 
     void Display::window_resize(int width, int height) {
         resize(width, height);
-        LOG("WINDOW", "RESIZE WIDTH: " << width << "; HEIGHT: " << height);
+   //     LOG("WINDOW", "RESIZE WIDTH: " << width << "; HEIGHT: " << height);
     }
 
     void Display::setCursor(bool enabled) {
@@ -142,7 +142,7 @@ namespace proton {
     }
 
     void Display::clear() {
-        glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+       glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
     }
 
 }

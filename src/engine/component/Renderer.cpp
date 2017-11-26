@@ -22,6 +22,8 @@ namespace proton{
     }
 
     Renderer::~Renderer() {
+        delete mpVertexArray;
+        delete mpIndexBuffer;
         delete mpShader;
     }
 
@@ -43,7 +45,7 @@ namespace proton{
 
         mpVertexArray->bind();
         mpIndexBuffer->bind();
-
+        glDrawElements(GL_LINES, mpIndexBuffer->getCount(), GL_UNSIGNED_INT, 0);
 
         mpShader->unbind();
         //@TODO unbinding textures

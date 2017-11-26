@@ -35,7 +35,7 @@ void Scene::addEntity(proton::Entity *e) {
         LOG("Scene","Adding camera");
         if (mMainCamera < 0) {
 
-            LOG("Scene","settign to main camera");
+            LOG("Scene","setting to main camera");
             mMainCamera = 0;
         }
         mpCameraList.push_back(dynamic_cast<Camera *>(e));

@@ -1,14 +1,15 @@
 //
 // Created by teeebor on 2017-10-24.
 //
-
-#include "Transform.h"
-#include <glm/gtc/matrix_transform.hpp>
+#define GLM_ENABLE_EXPERIMENTAL
 #include "../entity/Entity.h"
 
+#include "Transform.h"
+#include <glm/gtx/transform.hpp>
+#include <glm/mat4x4.hpp>
 namespace proton {
 
-    Transform::Transform():mRotation(glm::quat(glm::vec3(0,0,0))) {
+    Transform::Transform():mScale(glm::vec3(1,1,1)),mRotation(glm::vec3(0,0,0)) {
         mDirty=true;
     }
 
@@ -49,23 +50,29 @@ namespace proton {
         scale(factor.x, factor.y, factor.z);
     }
 
+/*
     void Transform::rotate(glm::quat quaternion) {
         setDirty();
         mRotation += quaternion;
     }
+*/
 
     void Transform::rotate(glm::vec3 rotation) {
         setDirty();
-        glm::quat quat = glm::quat(rotation);
-        mRotation += quat;
+        mRotation.x+=rotation.x;
+        mRotation.y+=rotation.y;
+        mRotation.z+=rotation.z;
+        mRotation.x=(mRotation.x<0?360-mRotation.x:(mRotation.x>=360?mRotation.x-360:mRotation.x));
+        mRotation.y=(mRotation.y<0?360-mRotation.y:(mRotation.y>=360?mRotation.y-360:mRotation.y));
+        mRotation.z=(mRotation.z<0?360-mRotation.z:(mRotation.z>=360?mRotation.z-360:mRotation.z));
     }
 
-    glm::quat Transform::rotation() {
+    glm::vec3 Transform::rotation() {
         return mRotation;
     }
-    glm::vec3 Transform::eulerRotation() {
+/*    glm::vec3 Transform::eulerRotation() {
         return glm::eulerAngles(mRotation);
-    }
+    }*/
 
     void Transform::setDirty() {
         mDirty = true;
@@ -75,17 +82,13 @@ namespace proton {
     }
 
     glm::mat4 Transform::getTransformationMatrix() {
+        mDirty = true;
         if (mDirty) {
             mDirty = false;
-            glm::mat4 model = glm::mat4_cast(mRotation);
-            model *= glm::translate(glm::mat4(1.0f), mTransform);
-            model *= glm::scale(glm::mat4(1.0f), mScale);
-            if(mpEntity->parent()!= nullptr){
-                mModel = mpEntity->parent()->transform().mModel;
-                mModel *= model;
-            }else{
-                mModel=model;
-            }
+            glm::mat4 rotation = rotationMat();
+            glm::mat4 translate = glm::translate(glm::mat4(1.0f), mTransform);
+            glm::mat4 scale = glm::scale(glm::mat4(1.0f),mScale);
+            mModel=  translate * rotation * scale;
         }
         return mModel;
     }
@@ -104,6 +107,13 @@ namespace proton {
 
     glm::vec3 Transform::position() {
         return mTransform;
+    }
+
+    glm::mat4 Transform::rotationMat() {
+//        return glm::rotate(glm::mat4(1.f),1.f,mRotation);
+        return glm::rotate(mRotation.x,glm::vec3(1,0,0)) *
+                glm::rotate(mRotation.y,glm::vec3(0,1,0))*
+                glm::rotate(mRotation.z,glm::vec3(0,0,1));
     }
 
 

@@ -21,26 +21,27 @@ set(GLBINDING_INCLUDE ${LIB_DIR}/glbinding/source/glbinding/include
 set(GLBINDING_LIB ${CMAKE_CURRENT_SOURCE_DIR}/temp/glbinding/libglbinding.a)
 
 #assimp
-set(ASSIMP_BUILD_ASSIMP_TOOLS OFF)
-set(ASSIMP_BUILD_TESTS OFF)
-add_subdirectory(${LIB_DIR}/assimp)
-set(ASSIMP_INCLUDE ${LIB_DIR}/assimp/include)
+set(ASSIMP_LIB ${CMAKE_CURRENT_SOURCE_DIR}/temp/assimp/code/libassimp.dll.a)
+set(ASSIMP_INCLUDE ${LIB_DIR}/assimp/include ${CMAKE_CURRENT_SOURCE_DIR}/temp/assimp/include)
 
 #chaiscript
 set(CHAI_INCLUDE ${LIB_DIR}/chaiscript/include)
-add_subdirectory(${LIB_DIR}/chaiscript)
+set(CHAI_LIB ${CMAKE_CURRENT_SOURCE_DIR}/temp/chaiscript/libstdlib.a
+        ${CMAKE_CURRENT_SOURCE_DIR}/temp/chaiscript/libparser.a)
 
 include_directories(
         ${GLM_INCLUDE}
         ${GLBINDING_INCLUDE}
         ${GLFW_INCLUDE}
-        ${CHAI_INCLUDE}
+#        ${CHAI_INCLUDE}
         ${ASSIMP_INCLUDE}
 )
 
 set(LINKER
         ${GLBINDING_LIB}
         ${GLFW_LIB}
+        ${ASSIMP_LIB}
+#        ${CHAI_LIB}
         )
 
 

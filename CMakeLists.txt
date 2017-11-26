@@ -4,7 +4,8 @@ cmake_minimum_required(VERSION 3.8)
 
 set(CMAKE_CXX_STANDARD 14)
 
-option(DEPENDENCY "Make a specific thing" OFF)
+#add_definitions(-O1)
+
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/bin")
 
@@ -25,7 +26,7 @@ set(SOURCE_FILES src/main.cpp src/interface/display/Display.cpp
         src/engine/entity/Entity.cpp src/engine/entity/Entity.h
         src/interface/graphics/IndexBuffer.cpp src/interface/graphics/IndexBuffer.h
         src/interface/graphics/VertexArray.cpp src/interface/graphics/VertexArray.h
-        src/engine/Scene.cpp src/engine/Scene.h src/engine/entity/Camera.cpp src/engine/entity/Camera.h)
+        src/engine/Scene.cpp src/engine/Scene.h src/engine/entity/Camera.cpp src/engine/entity/Camera.h src/engine/component/DemoComponent.cpp src/engine/component/DemoComponent.h)
 include(submodules.cmake)
 include(cmake/dependencies.cmake)
 
@@ -34,4 +35,3 @@ add_executable(proton ${SOURCE_FILES} ${IMGUI_SOURCES})
 
 target_link_libraries(proton ${LINKER} ${ARGUMENTS})
 
-MESSAGE( STATUS "dependency: " ${DEPENDENCY} )

@@ -6,6 +6,7 @@
 #include "../component/Component.h"
 #include "../component/Transform.h"
 #include "../component/Renderer.h"
+#include "../../utility.h"
 
 namespace proton {
 
@@ -22,6 +23,7 @@ namespace proton {
 
     Entity::~Entity() {
         delete mpTransform;
+        delete mpRenderer;
         for(Component *c : mpComponentList){
             delete(c);
         }
@@ -32,9 +34,12 @@ namespace proton {
 
     void Entity::addComponent(Component *comp) {
         comp->setEntity(this);
+        LOG("ENTITY","ADDING COMPONENT");
         if(nullptr != dynamic_cast<Renderer*>(comp)){
+            LOG("ENTITY","Renderer");
             mpRenderer= dynamic_cast<Renderer*>(comp);
         }else{
+            LOG("ENTITY","Other");
             mpComponentList.push_back(comp);
         }
     }

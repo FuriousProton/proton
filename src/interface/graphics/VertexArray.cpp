@@ -15,6 +15,7 @@ namespace proton{
         for (Buffer *b : mBufferList) {
             delete(b);
         }
+        glDeleteVertexArrays(1,&mArrayID);
     }
 
     void VertexArray::addBuffer(Buffer *buffer, unsigned int index) {

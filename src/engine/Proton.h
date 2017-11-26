@@ -20,11 +20,12 @@ public:
      */
     void startLoop();
 
+    void loopChilds(proton::Entity *e);
     /**
      * Creating display
      * @param dSettings Reference to the display configuration structure
      */
-    void createDisplay(DisplaySettings &dSettings);
-
+    bool createDisplay(DisplaySettings &dSettings);
+    void cleanUp();
 };
 

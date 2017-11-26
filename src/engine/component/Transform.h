@@ -9,7 +9,7 @@
 
 namespace proton {
     class Transform : public Component{
-        glm::quat mRotation;
+        glm::vec3 mRotation;
         glm::vec3 mTransform;
         glm::vec3 mScale;
         glm::mat4 mModel;
@@ -35,10 +35,11 @@ namespace proton {
 
         void scale(glm::vec3 factor);
 
-        void rotate(glm::quat quaternion);
+       // void rotate(glm::quat quaternion);
         void rotate(glm::vec3 rotation);
-        glm::vec3 eulerRotation();
-        glm::quat rotation();
+        //glm::vec3 eulerRotation();
+        glm::vec3 rotation();
+        glm::mat4 rotationMat();
         glm::vec3 position();
 
 

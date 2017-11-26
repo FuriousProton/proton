@@ -11,7 +11,7 @@ namespace proton{
         unsigned int mBufferId;
         unsigned int mComponentCount;
     public:
-        Buffer(float *data, int count, unsigned int componentCount);
+        Buffer(const void *data, int count, unsigned int componentCount);
         ~Buffer();
 
         void bind() const;
@@ -20,7 +20,7 @@ namespace proton{
         unsigned int getComponentCount();
 
     private:
-        void load(float *data, int count, unsigned int componentCount);
+        void load(const void *data, int count, unsigned int componentCount);
     };
 }
 

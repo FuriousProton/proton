@@ -7,11 +7,11 @@
 
 namespace proton{
     using namespace gl;
-    Buffer::Buffer(float *data, int count, unsigned int componentCount) {
+    Buffer::Buffer(const void *data, int count, unsigned int componentCount) {
         load(data,count,componentCount);
     }
 
-    void Buffer::load(float *data, int count, unsigned int componentCount) {
+    void Buffer::load(const void *data, int count, unsigned int componentCount) {
         mComponentCount = componentCount;
 
         glGenBuffers(1, &mBufferId);

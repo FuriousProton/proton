@@ -75,9 +75,6 @@ namespace proton {
 
     int Shader::getUniformLocation(const char *name) {
         using namespace gl;
-        LOG("GETTING UNIFORM",name);
-        LOG("COUNT",mUniforms.size());
-
         for(int i=0;i<mUniforms.size();i++){
           if(strcasecmp(name,mUniforms[i]->key)==0){
                 return static_cast<unsigned int>(mUniforms[i]->ID);
@@ -112,9 +109,7 @@ namespace proton {
     }
 
     void Shader::loadUniformMat4f(unsigned int location, const glm::mat4& uniform) {
-        LOG("UnifromMAt","start");
         glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(uniform));
-        LOG("UnifromMAt","end");
     }
 
     void Shader::loadUniformMat4f(unsigned int location, glm::mat4& uniform) {
@@ -156,7 +151,7 @@ namespace proton {
     }
 
     void Shader::loadData() {
-        LOG("SHADER_ERR","NOT IMPLEMENTED");
+    //    LOG("SHADER_ERR","NOT IMPLEMENTED");
     }
 
     Shader::Shader() {

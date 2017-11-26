@@ -20,21 +20,13 @@ namespace proton {
     }
 
     glm::mat4 Camera::getViewMatrix() {
-        //@TODO: null a transform
-        LOG("Camera","View start");
-        glm::mat4 rotationMat = glm::mat4_cast(mpTransform->rotation());
+        glm::mat4 rotationMat = mpTransform->rotationMat();
 
-        LOG("Camera",1);
-        glm::vec3 pos =mpTransform->position();
-        LOG("Camera",2);
+        glm::vec3 pos = mpTransform->position();
         pos.x*=-1;
         pos.y*=-1;
         pos.z*=-1;
-        rotationMat *= glm::translate(glm::mat4(1.0f), pos);
-        LOG("Camera",3);
-
-        LOG("Camera","View end");
-        return rotationMat;
+        return glm::translate(glm::mat4(1.0f), pos) * rotationMat;
     }
 
     void Camera::createProjectionMatrix() {
