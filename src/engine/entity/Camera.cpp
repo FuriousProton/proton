@@ -16,12 +16,11 @@ namespace proton {
     Camera::Camera(float frameWidth, float frameHeight, float fov, float near, float far)
             :mFrameWidth(frameWidth), mFrameHeight(frameHeight), mFov(fov), mNear(near), mFar(far) {
         createProjectionMatrix();
-
+        glEnable(GL_DEPTH_TEST);
     }
 
     glm::mat4 Camera::getViewMatrix() {
         glm::mat4 rotationMat = mpTransform->rotationMat();
-
         glm::vec3 pos = mpTransform->position();
         pos.x*=-1;
         pos.y*=-1;

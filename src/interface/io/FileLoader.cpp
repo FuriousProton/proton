@@ -76,11 +76,12 @@ namespace proton {
         Assimp::Importer importer;
         const aiScene *_scene = importer.ReadFile(model,
                                                   aiProcess_CalcTangentSpace
-                                                          | aiProcess_Triangulate
-                                                       //   | aiProcess_SortByPType
+                                                           | aiProcess_Triangulate
+                                                          | aiProcess_SortByPType
                                                           | aiProcess_JoinIdenticalVertices
         );
-        std::vector<Renderer*> renderers(_scene->mNumMeshes);
+        std::vector<Renderer*> renderers;
+        if(_scene){
 
 //Material and texture loading
 /*        if (_scene->HasMaterials()) {
@@ -94,54 +95,40 @@ namespace proton {
             }
         }
 */
-        //Loading model
-        std::vector<unsigned int> indices;
-        float defaultCoords[3]={1.0f, 1.0f, 1.0f};
-        float coords[3];
-        if (_scene->HasMeshes()) {
-            for(int i=0;i<_scene->mNumMeshes;i++){
-                const aiMesh *mesh=_scene->mMeshes[i];
-                unsigned int faceCount = mesh->mNumFaces;
+            //Loading model
+            std::vector<unsigned int> indices;
+            if (_scene->HasMeshes()) {
+                for(int i=0;i<_scene->mNumMeshes;i++){
+                    const aiMesh *mesh=_scene->mMeshes[i];
+                    unsigned int faceCount = mesh->mNumFaces;
 
-                auto faceArray =  new unsigned int[mesh->mNumFaces * 3];
-               unsigned int faceIndex=0;
+                    auto faceArray =  new unsigned int[mesh->mNumFaces * 3];
+                    unsigned int faceIndex = 0;
 
-                for(int t=0;t<mesh->mNumVertices;t++){
-                    LOG("v ["<<t<<"]",mesh->mVertices[t].x<<", "<<mesh->mVertices[t].y<<", "<< mesh->mVertices[t].z);
+                    for (unsigned int t = 0; t < mesh->mNumFaces; t++) {
+                        const aiFace* face = &mesh->mFaces[t];
+                        memcpy(&faceArray[faceIndex], face->mIndices,3 * sizeof(unsigned int));
+                        faceIndex += 3;
+                    }
+
+
+                    auto *r=new Renderer("simple.shader");
+                    auto *ibo = new IndexBuffer(faceArray, faceCount*3);
+                    auto *vao = new VertexArray();
+                    int count=mesh->mNumVertices*3;
+                    vao->addBuffer(new Buffer(mesh->mVertices,count,3),0);
+//                    if(mesh->HasNormals()){
+//                        vao->addBuffer(new Buffer(mesh->mNormals,count,3),1);
+//                    }
+//                    if(mesh->HasTextureCoords(0)){
+//                        vao->addBuffer(new Buffer(mesh->mTextureCoords,count,3),2);
+//                    }
+                    r->setModel(ibo,vao);
+                    renderers.push_back(r);
                 }
-
-                for (unsigned int t = 0; t < mesh->mNumFaces; ++t) {
-                    const aiFace* face = &mesh->mFaces[t];
-                    LOG("f ["<<t<<"]",face->mIndices[0]<<", "<<face->mIndices[1]<<", "<< face->mIndices[2]);
-
-#ifdef MEMCPY
-                    memcpy(&faceArray[faceIndex], face->mIndices, 3 * sizeof(unsigned int));
-#else
-                    faceArray[t * 3] = mesh->mFaces[t].mIndices[0];
-                    faceArray[t * 3 + 1] = mesh->mFaces[t].mIndices[1];
-                    faceArray[t * 3 + 2] = mesh->mFaces[t].mIndices[2];
-#endif
-
-                    faceIndex += 3;
-                }
-
-                for (unsigned int t = 0; t < mesh->mNumFaces; t++) {
-                    //const aiFace* face = &;
-
-                }
-
-                auto *normals = mesh->mNormals;
-                auto *uvs = mesh->mTextureCoords;
-
-
-                renderers[i]=new Renderer("simple.shader");
-                auto *ibo = new IndexBuffer(faceArray, faceCount*3);
-                auto *vao = new VertexArray();
-                vao->addBuffer(new Buffer(mesh->mVertices,mesh->mNumVertices*3,3),0);
-//                vao->addBuffer(new Buffer(uvs,faceCount*3,3),1);
-//                vao->addBuffer(new Buffer(normals,faceCount*3,3),2);
-                renderers[i]->setModel(ibo,vao);
             }
+        }else{
+            LOG("MODEL LOADER","Faliled to load model");
         }
         return renderers;
     }

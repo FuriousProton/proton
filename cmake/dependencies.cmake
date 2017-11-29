@@ -20,7 +20,21 @@ add_custom_command(TARGET glfw_module POST_BUILD        # Adds a post-build even
         $<TARGET_FILE_DIR:proton>)                 # <--this is out-file path
 
 ]]
-
+#add_definitions(-O1)
+ExternalProject_Add(ozz_module
+        GIT_SUBMODULES "submodule/ozz-animation"
+        DOWNLOAD_COMMAND git submodule update --recursive
+        SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/submodule/ozz-animation"
+        BINARY_DIR "${CMAKE_CURRENT_SOURCE_DIR}/temp/ozz-animation"
+        CMAKE_ARGS
+        -Dozz_build_cpp11=ON
+        -Dozz_build_msvc_rt_dll=OFF
+        -Dozz_build_howtos=OFF
+        -Dozz_build_samples=OFF
+        UPDATE_COMMAND ""
+        INSTALL_COMMAND ""
+        TEST_COMMAND ""
+        )
 ExternalProject_Add(assimp_module
         GIT_SUBMODULES "submodule/assimp"
         DOWNLOAD_COMMAND git submodule update --recursive
@@ -28,7 +42,12 @@ ExternalProject_Add(assimp_module
         BINARY_DIR "${CMAKE_CURRENT_SOURCE_DIR}/temp/assimp"
         CMAKE_ARGS
         -DASSIMP_BUILD_ASSIMP_TOOLS=OFF
+#        -DENABLE_BOOST_WORKAROUND=ON
         -DASSIMP_BUILD_TESTS=OFF
+#        -DBUILD_SHARED_LIBS=OFF
+        -DASSIMP_BUILD_NO_OWN_ZLIB=ON
+        -DASSIMP_BUILD_NO_IFC_IMPORTER=OFF
+        -DASSIMP_NO_EXPORT=ON
         UPDATE_COMMAND ""
         INSTALL_COMMAND ""
         TEST_COMMAND ""
@@ -48,7 +67,11 @@ ExternalProject_Add(chai_module
         BINARY_DIR "${CMAKE_CURRENT_SOURCE_DIR}/temp/chaiscript"
         CMAKE_ARGS
         -DUNIT_TEST_LIGHT=ON
+        -DRUN_PERFORMANCE_TESTS=OFF
+        -DRUN_FUZZY_TESTS=OFF
+        -DBUILD_TESTING=OFF
         -DBUILD_MODULES=OFF
+        -DBUILD_SAMPLES=OFF
 #        -DMULTITHREAD_SUPPORT_ENABLED=FALSE
         -DDYNLOAD_ENABLED=FALSE
         UPDATE_COMMAND ""

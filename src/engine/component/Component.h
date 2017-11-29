@@ -21,6 +21,10 @@ namespace proton {
         Entity &getEntity();
 
         void setEntity(Entity *e);
+
+        bool getKeyDown(int key);
+        bool getKeyUp(int key);
+        bool getKeyPress(int key);
     };
 
 }

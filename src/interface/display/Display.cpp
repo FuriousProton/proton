@@ -6,6 +6,7 @@
 #include <glbinding/Binding.h>
 #include <GLFW/glfw3.h>
 #include "../../utility.h"
+#include "../../engine/Proton.h"
 #include <math.h>
 
 namespace proton {
@@ -75,6 +76,11 @@ namespace proton {
 
 
     void Display::update() {
+        for(std::pair<const int, int> & state : Proton::keyStates){
+            if(state.second==0){
+                Proton::keyStates.erase(state.first);
+            }
+        }
         glFlush();
         glfwSwapBuffers(mpWindow);
         glfwPollEvents();
@@ -90,6 +96,7 @@ namespace proton {
     }
 
     void Display::key_callback(int key, int scancode, int action, int mods) {
+        Proton::keyStates[key]=action;
 //        LOG("KEYBOARD", "KEY: " << key << " SCAN: " << scancode << " ACTION: " << action);
     }
 

@@ -12,9 +12,8 @@ namespace proton{
 }
 
 class Scene {
-private:
-    int mMainCamera;
 public:
+    int mMainCamera;
     std::vector<proton::Entity *> mpEntityList;
     std::vector<proton::Camera *> mpCameraList;
     static Scene *activeScene;

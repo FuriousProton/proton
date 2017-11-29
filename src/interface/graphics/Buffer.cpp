@@ -16,7 +16,7 @@ namespace proton{
 
         glGenBuffers(1, &mBufferId);
         glBindBuffer(GL_ARRAY_BUFFER, mBufferId);
-        glBufferData(GL_ARRAY_BUFFER, count * sizeof(GLfloat), data, GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, count * sizeof(float), data, GL_STATIC_DRAW);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
 

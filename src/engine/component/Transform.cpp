@@ -9,7 +9,7 @@
 #include <glm/mat4x4.hpp>
 namespace proton {
 
-    Transform::Transform():mScale(glm::vec3(1,1,1)),mRotation(glm::vec3(0,0,0)) {
+    Transform::Transform():mTransform(glm::vec3(0,0,0)),mScale(glm::vec3(1,1,1)),mRotation(glm::vec3(0,0,0)) {
         mDirty=true;
     }
 
@@ -76,9 +76,9 @@ namespace proton {
 
     void Transform::setDirty() {
         mDirty = true;
-        for (auto &child : mpEntity->mpChildList) {
-            child->transform().setDirty();
-        }
+            for (auto child : mpEntity->mpChildList) {
+                child->transform().setDirty();
+            }
     }
 
     glm::mat4 Transform::getTransformationMatrix() {
@@ -89,6 +89,10 @@ namespace proton {
             glm::mat4 translate = glm::translate(glm::mat4(1.0f), mTransform);
             glm::mat4 scale = glm::scale(glm::mat4(1.0f),mScale);
             mModel=  translate * rotation * scale;
+
+            if(mpEntity->parent()){
+                mModel=mpEntity->parent()->transform().getTransformationMatrix()*mModel;
+            }
         }
         return mModel;
     }

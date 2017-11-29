@@ -13,8 +13,9 @@
 #include "engine/component/Transform.h"
 #include "engine/component/DemoComponent.h"
 #include "interface/io/FileLoader.h"
+#include "engine/component/Move.h"
 
-//#define CHAI
+#define CHAI
 
 #ifdef CHAI
 #include <chaiscript/chaiscript.hpp>
@@ -45,7 +46,6 @@ int main()
         auto *c = new Camera(800, 600, 70, .01f, 1000);
         auto *e = new Entity();
         auto *r = new Renderer("simple.shader");
-        //@TODO culling bugging for some reason
         scene->addEntity(c);
 #define IBO_LEN 3
         unsigned int indexes[IBO_LEN] = {
@@ -71,14 +71,24 @@ int main()
      vao.addBuffer(&colors, 3);
     r->setModel(&ibo, &vao);*/
 
-        std::vector<Renderer *> renderer=FileLoader::loadModel("cube.obj");
-        e->addComponent(renderer[0]);
+        std::vector<Renderer *> renderer=FileLoader::loadModel("house/house.obj");
+//        std::vector<Renderer *> renderer2=FileLoader::loadModel("dragon.obj");
+//        renderer.push_back(renderer2[0]);
+        if(!renderer.empty()){
+            for (auto &i : renderer) {
+                Entity *child=new Entity;
+                child->addComponent(i);
+                e->addChild(*child);
+            }
+        }
 
-        c->transform().move(0,0,10);
+        c->transform().move(0,5,10);
         e->addComponent(new DemoComponent());
+        c->addComponent(new Move());
       //  e->transform().rotate(glm::vec3(90,0,0));
         scene->addEntity(e);
-        c->setCulling(true);
+        c->setCulling(false);
+        c->setBlend(false);
         scene->activate();
         p.startLoop();
         p.cleanUp();

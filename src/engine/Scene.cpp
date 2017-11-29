@@ -31,7 +31,6 @@ void Scene::addEntity(proton::Entity *e) {
     using namespace proton;
     LOG("Scene","Adding entity");
     if (nullptr != dynamic_cast<Camera *>(e)) {
-
         LOG("Scene","Adding camera");
         if (mMainCamera < 0) {
 
@@ -39,11 +38,8 @@ void Scene::addEntity(proton::Entity *e) {
             mMainCamera = 0;
         }
         mpCameraList.push_back(dynamic_cast<Camera *>(e));
-    } else {
-
-        LOG("Scene","Not camera");
-        mpEntityList.push_back(e);
     }
+    mpEntityList.push_back(e);
 }
 
 void Scene::removeEntity(proton::Entity *e) {

@@ -45,13 +45,13 @@ namespace proton{
 
         mpVertexArray->bind();
         mpIndexBuffer->bind();
-        glDrawElements(GL_LINES, mpIndexBuffer->getCount(), GL_UNSIGNED_INT, 0);
+        glDrawElements(static_cast<GLenum>(renderMode), mpIndexBuffer->getCount(), GL_UNSIGNED_INT, 0);
 
         mpShader->unbind();
         //@TODO unbinding textures
 
-        mpVertexArray->bind();
-        mpIndexBuffer->bind();
+        mpVertexArray->unbind();
+        mpIndexBuffer->unbind();
     }
 
     void Renderer::setModel(IndexBuffer *ibo, VertexArray *vao) {

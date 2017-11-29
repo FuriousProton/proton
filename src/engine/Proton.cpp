@@ -13,6 +13,7 @@
 #include "component/Renderer.h"
 #include "component/Transform.h"
 
+std::map<int, int>Proton::keyStates;
 
 bool Proton::createDisplay(DisplaySettings &displaySettings) {
     mDisplay=new proton::Display(displaySettings.width,displaySettings.height,displaySettings.title);
@@ -24,6 +25,7 @@ bool Proton::createDisplay(DisplaySettings &displaySettings) {
 }
 
 void Proton::loopChilds(proton::Entity *e) {
+    e->transform().update();
     for(proton::Component *c : e->mpComponentList){
         c->update();
     }
@@ -31,9 +33,7 @@ void Proton::loopChilds(proton::Entity *e) {
         e->mpRenderer->render();
     }
     if(e->mpChildList.size()>0){
-        e->transform().update();
-
-        for(proton::Entity *ce : e->mpChildList){
+        for(auto ce : e->mpChildList){
             loopChilds(ce);
         }
     }

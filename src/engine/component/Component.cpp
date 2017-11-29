@@ -3,6 +3,8 @@
 //
 
 #include "Component.h"
+#include "../Proton.h"
+
 namespace proton{
     void Component::update() {
     }
@@ -19,5 +21,26 @@ namespace proton{
 
     Entity &Component::getEntity() {
         return *mpEntity;
+    }
+
+    bool Component::getKeyDown(int key) {
+        if(Proton::keyStates.count(key)){
+            return Proton::keyStates[key]==2;
+        }
+        return false;
+    }
+
+    bool Component::getKeyUp(int key) {
+        if(Proton::keyStates.count(key)){
+            return Proton::keyStates[key]==0;
+        }
+        return false;
+    }
+
+    bool Component::getKeyPress(int key) {
+        if(Proton::keyStates.count(key)){
+            return Proton::keyStates[key]==1;
+        }
+        return false;
     }
 }

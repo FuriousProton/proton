@@ -5,6 +5,7 @@
 #pragma once
 
 #include <vector>
+#include <map>
 struct DisplaySettings;
 namespace proton{
     class Display;
@@ -15,6 +16,8 @@ private:
     proton::Display *mDisplay;
     std::vector<proton::Entity*> mEntities;
 public:
+    static std::map<int, int> keyStates;
+
     /**
      * Main loop
      */

@@ -33,7 +33,7 @@ out vec4 color;
 
 void main(){
     float c = out_color.z*4;
-    color = normalize(vec4(c,c,c,1.0));
+//    color = normalize(vec4(c,c,c,1.0));
 //    color = vec4(1.0);
-//   color = vec4(normalize(out_color).xyz,1.0);
+   color = vec4(normalize(out_color).xyz,1.0);
 }

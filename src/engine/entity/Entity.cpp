@@ -7,6 +7,8 @@
 #include "../component/Transform.h"
 #include "../component/Renderer.h"
 #include "../../utility.h"
+#include "Camera.h"
+#include "../Scene.h"
 
 namespace proton {
 
@@ -18,6 +20,7 @@ namespace proton {
         mpRenderer= nullptr;
         mpTransform = new Transform();
         mpTransform->setEntity(this);
+        mpTransform->start();
     }
 
 
@@ -56,6 +59,17 @@ namespace proton {
 
     void Entity::addChild(Entity &child) {
         child.mpParent = this;
+
+        if (nullptr != dynamic_cast<Camera *>(&child)) {
+            LOG("Scene","Adding camera");
+            if (Scene::activeScene->mMainCamera < 0) {
+
+                LOG("Scene","setting to main camera");
+                Scene::activeScene->mMainCamera = 0;
+            }
+            Scene::activeScene->mpCameraList.push_back(dynamic_cast<Camera *>(&child));
+        }
+
         mpChildList.push_back(&child);
     }
 }
