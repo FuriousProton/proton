@@ -3,8 +3,8 @@
 //
 
 #include "Move.h"
-#include "Transform.h"
-#include "../../utility.h"
+#include "../../../include/component/Transform.h"
+#include "../../../include/utility.h"
 
 void proton::Move::start() {
     Component::start();

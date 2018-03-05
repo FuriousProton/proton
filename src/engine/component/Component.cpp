@@ -2,8 +2,8 @@
 // Created by teeebor on 2017-10-05.
 //
 
-#include "Component.h"
-#include "../Proton.h"
+#include "../../../include/component/Component.h"
+#include "../../../include/Proton.h"
 
 namespace proton{
     void Component::update() {

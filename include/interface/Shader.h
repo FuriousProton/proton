@@ -4,23 +4,25 @@
 
 #pragma once
 
-#include <string>
+#include "../utility.h"
+
 #include <glbinding/gl/gl.h>
+#include <string>
 #include <glm/gtc/type_ptr.hpp>
 #include <vector>
 
 namespace proton{
-    struct Uniform{
+    struct PROTON_API UniformData{
         const char* key;
         int ID;
-        Uniform(const char* _key,int _id):key(_key),ID(_id){};
+        UniformData(const char* _key,int _id):key(_key),ID(_id){};
     };
 
     using namespace gl;
     class Shader {
     private:
             unsigned int id;
-            std::vector<Uniform*> mUniforms;
+            std::vector<UniformData*> mUniforms;
     public:
 
         Shader();
@@ -29,7 +31,6 @@ namespace proton{
         void bind();
         void unbind();
 
-        void loadData();
 
         void loadUniform1f(const char *name, float value);
         void loadUniform1i(const char *name, int value);
@@ -50,9 +51,11 @@ namespace proton{
 
         void loadUniformMat4f(unsigned int location, const glm::mat4& uniform);
         void loadUniformMat4f(unsigned int location, glm::mat4& uniform);
+
+        int getUniformLocation(const char *name);
+
     private:
         unsigned int buildShader(std::string &content, GLenum shaderType);
-        int getUniformLocation(const char *name);
     };
 }
 

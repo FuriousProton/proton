@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include "utility.h"
+
 #include <vector>
 
 namespace proton{
@@ -11,7 +13,7 @@ namespace proton{
     class Camera;
 }
 
-class Scene {
+class PROTON_API Scene {
 public:
     int mMainCamera;
     std::vector<proton::Entity *> mpEntityList;

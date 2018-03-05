@@ -3,7 +3,7 @@
 //
 
 #include <glbinding/gl/gl.h>
-#include "Buffer.h"
+#include "../../../include/interface/Buffer.h"
 
 namespace proton{
     using namespace gl;

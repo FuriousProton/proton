@@ -4,10 +4,11 @@
 
 #pragma once
 
+#include "../utility.h"
 #include "../entity/Entity.h"
 
 namespace proton {
-    class Component {
+    class PROTON_API Component {
     protected:
         Entity *mpEntity{};
     public:

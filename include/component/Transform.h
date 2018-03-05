@@ -4,11 +4,12 @@
 
 #pragma once
 
+#include "../utility.h"
 #include <glm/gtc/type_ptr.hpp>
 #include "Component.h"
 
 namespace proton {
-    class Transform : public Component{
+    class PROTON_API Transform : public Component{
         glm::vec3 mRotation;
         glm::vec3 mTransform;
         glm::vec3 mScale;

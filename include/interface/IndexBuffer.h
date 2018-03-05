@@ -3,9 +3,10 @@
 //
 
 #pragma once
+#include "../utility.h"
 
 namespace proton {
-    class IndexBuffer {
+    class PROTON_API IndexBuffer {
     private:
         unsigned int mBufferID;
         unsigned int mCount;

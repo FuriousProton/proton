@@ -2,11 +2,11 @@
 // Created by teeebor on 2017-11-03.
 //
 
-#include "Scene.h"
+#include "../../include/Scene.h"
 
-#include "entity/Entity.h"
-#include "entity/Camera.h"
-#include "../utility.h"
+#include "../../include/entity/Entity.h"
+#include "../../include/entity/Camera.h"
+#include "../../include/utility.h"
 Scene *Scene::activeScene= nullptr;
 Scene::Scene() {
     mMainCamera = -1;

@@ -2,7 +2,7 @@
 // Created by teeebor on 2017-10-25.
 //
 
-#include "FileLoader.h"
+#include "../../../include/io/FileLoader.h"
 #include <iostream>
 #include <cstring>
 #include <fstream>
@@ -12,13 +12,26 @@
 #include <assimp/scene.h>           // Output data structure
 #include <assimp/postprocess.h>     // Post processing flags
 
+#include <stdio.h>  /* defines FILENAME_MAX */
+// #define WINDOWS  /* uncomment this line to use it for windows.*/
+#ifdef WINDOWS
+#include <direct.h>
+#define GetCurrentDir _getcwd
+#else
+#include <unistd.h>
+#define GetCurrentDir getcwd
+#endif
 
-#include "../graphics/Shader.h"
-#include "../../utility.h"
-#include "../graphics/VertexArray.h"
-#include "../graphics/Buffer.h"
-#include "../../engine/component/Renderer.h"
-#include "../graphics/IndexBuffer.h"
+#include <glbinding/gl/gl.h>
+#include<iostream>
+
+#include "../../../include/interface/Shader.h"
+#include "../../../include/utility.h"
+#include "../../../include/interface/VertexArray.h"
+#include "../../../include/interface/Buffer.h"
+#include "../../../include/component/Renderer.h"
+#include "../../../include/interface/IndexBuffer.h"
+#include "../../../include/interface/Texture.h"
 
 namespace proton {
     std::string FileLoader::readFile(const char *path) {
@@ -67,68 +80,106 @@ namespace proton {
                 shaderContent[currentshader] += line + "\n";
             }
         }
+        errorCheck("before shader load");
+
         shader->load(shaderContent);
+        errorCheck("shader load");
+
         return shader;
     }
 
-    std::vector<Renderer*> FileLoader::loadModel(const char *model) {
+    std::vector<Renderer *> FileLoader::loadModel(const char *model, const char* material) {
         unsigned int numFaces = 0;
         Assimp::Importer importer;
-        const aiScene *_scene = importer.ReadFile(model,
-                                                  aiProcess_CalcTangentSpace
-                                                           | aiProcess_Triangulate
-                                                          | aiProcess_SortByPType
-                                                          | aiProcess_JoinIdenticalVertices
-        );
-        std::vector<Renderer*> renderers;
-        if(_scene){
 
-//Material and texture loading
-/*        if (_scene->HasMaterials()) {
-            for(int i=0;i<_scene->mNumMaterials;i++){
-                aiMaterial *material=_scene->mMaterials[i];
+        const aiScene *_scene = importer.ReadFile(model,
+                                                  aiProcess_GenSmoothNormals |
+                                                  aiProcess_CalcTangentSpace
+                                                  | aiProcess_Triangulate
+                                                  | aiProcess_SortByPType
+                                                  | aiProcess_JoinIdenticalVertices
+        );
+        std::vector<Renderer *> renderers;
+        if (_scene) {
+            char buff[FILENAME_MAX];
+            GetCurrentDir( buff, FILENAME_MAX );
+            std::string current_working_dir(buff);
+
+            std::string path =  std::regex_replace (model,std::regex("([a-zA-Z0-9\\.\\_\\-\\s]+)\\.(OBJ|FBX|STL|obj|fbx|stl)$"),"/");
+            LOG("DIR",current_working_dir);
+            errorCheck("before texture load");
+            Texture *textures[_scene->mNumTextures];
+            if (_scene->HasMaterials()) {
+                for (unsigned int i = 0; i < _scene->mNumMaterials; i++) {
+                    const aiMaterial *material = _scene->mMaterials[i];
+                    int USECOLOR = 0;
+                    aiString texturePath;
+                    unsigned int numTextures = material->GetTextureCount(aiTextureType_DIFFUSE);   // always 0
+
+                    if (material->GetTextureCount(aiTextureType_DIFFUSE) > 0 &&
+                        material->GetTexture(aiTextureType_DIFFUSE, 0, &texturePath) == AI_SUCCESS) {
+                        std::cout << texturePath.C_Str() << std::endl;
+                        std::string s =  path;
+                        s.append(texturePath.C_Str());
+                        textures[i] = new Texture(s.c_str(), 0);
+                        LOG("TEXTURE",textures[i]->getTextureID());
+                        errorCheck("texture load");
+                    }
+
+                }
             }
-        }
-        if (_scene->HasTextures()) {
-            for (int i = 0; i < _scene->mNumTextures; i++) {
-                aiTexture *texture = _scene->mTextures[i];
-            }
-        }
-*/
+
             //Loading model
             std::vector<unsigned int> indices;
             if (_scene->HasMeshes()) {
-                for(int i=0;i<_scene->mNumMeshes;i++){
-                    const aiMesh *mesh=_scene->mMeshes[i];
+                for (int i = 0; i < _scene->mNumMeshes; i++) {
+                    const aiMesh *mesh = _scene->mMeshes[i];
                     unsigned int faceCount = mesh->mNumFaces;
 
-                    auto faceArray =  new unsigned int[mesh->mNumFaces * 3];
+                    auto faceArray = new unsigned int[mesh->mNumFaces * 3];
                     unsigned int faceIndex = 0;
 
                     for (unsigned int t = 0; t < mesh->mNumFaces; t++) {
-                        const aiFace* face = &mesh->mFaces[t];
-                        memcpy(&faceArray[faceIndex], face->mIndices,3 * sizeof(unsigned int));
+                        const aiFace *face = &mesh->mFaces[t];
+                        memcpy(&faceArray[faceIndex], face->mIndices, 3 * sizeof(unsigned int));
                         faceIndex += 3;
                     }
 
 
-                    auto *r=new Renderer("simple.shader");
-                    auto *ibo = new IndexBuffer(faceArray, faceCount*3);
+                    auto *r = new Renderer(material);
+                    errorCheck("shader");
+
+                    auto *ibo = new IndexBuffer(faceArray, faceCount * 3);
+                    errorCheck("ibo");
                     auto *vao = new VertexArray();
-                    int count=mesh->mNumVertices*3;
-                    vao->addBuffer(new Buffer(mesh->mVertices,count,3),0);
-//                    if(mesh->HasNormals()){
-//                        vao->addBuffer(new Buffer(mesh->mNormals,count,3),1);
-//                    }
-//                    if(mesh->HasTextureCoords(0)){
-//                        vao->addBuffer(new Buffer(mesh->mTextureCoords,count,3),2);
-//                    }
-                    r->setModel(ibo,vao);
+
+                    errorCheck("vao");
+                    int count = mesh->mNumVertices * 3;
+                    vao->addBuffer(new Buffer(mesh->mVertices, count, 3), 0);
+                    errorCheck("verticle");
+                    if (mesh->HasNormals()) {
+                        vao->addBuffer(new Buffer(mesh->mNormals, count, 3), 2);
+                        errorCheck("normal");
+
+                    }
+                    if (mesh->HasTextureCoords(0)) {
+                        vao->addBuffer(new Buffer(mesh->mTextureCoords[0], mesh->mNumVertices*3, 3), 1);
+                        errorCheck("texture");
+
+                    }
+                    int textureID = mesh->mMaterialIndex;
+                    if (textureID >= 0 && textureID < _scene->mNumTextures) {
+                        r->setTexture(textures[textureID]);
+                        errorCheck("texture_load");
+                    }
+                    r->setModel(ibo, vao);
                     renderers.push_back(r);
+
+                    errorCheck("LOAD");
                 }
             }
-        }else{
-            LOG("MODEL LOADER","Faliled to load model");
+        } else {
+            LOG("MODEL LOADER", "Faliled to load model");
         }
         return renderers;
     }

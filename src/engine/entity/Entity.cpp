@@ -2,13 +2,13 @@
 // Created by teeebor on 2017-10-05.
 //
 
-#include "Entity.h"
-#include "../component/Component.h"
-#include "../component/Transform.h"
-#include "../component/Renderer.h"
-#include "../../utility.h"
-#include "Camera.h"
-#include "../Scene.h"
+#include "../../../include/entity/Entity.h"
+#include "../../../include/component/Component.h"
+#include "../../../include/component/Transform.h"
+#include "../../../include/component/Renderer.h"
+#include "../../../include/utility.h"
+#include "../../../include/entity/Camera.h"
+#include "../../../include/Scene.h"
 
 namespace proton {
 
@@ -28,6 +28,7 @@ namespace proton {
         delete mpTransform;
         delete mpRenderer;
         for(Component *c : mpComponentList){
+            c->end();
             delete(c);
         }
         for(Entity *e : mpChildList){
@@ -44,6 +45,7 @@ namespace proton {
         }else{
             LOG("ENTITY","Other");
             mpComponentList.push_back(comp);
+            comp->start();
         }
     }
 

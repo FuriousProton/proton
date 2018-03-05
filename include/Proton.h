@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include "utility.h"
 #include <vector>
 #include <map>
 struct DisplaySettings;
@@ -11,13 +12,12 @@ namespace proton{
     class Display;
     class Entity;
 }
-class Proton {
+class PROTON_API Proton {
 private:
     proton::Display *mDisplay;
     std::vector<proton::Entity*> mEntities;
 public:
     static std::map<int, int> keyStates;
-
     /**
      * Main loop
      */

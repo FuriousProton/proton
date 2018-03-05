@@ -2,7 +2,7 @@
 // Created by teeebor on 2017-10-30.
 //
 
-#include "IndexBuffer.h"
+#include "../../../include/interface/IndexBuffer.h"
 #include <glbinding/gl/gl.h>
 
 namespace proton{

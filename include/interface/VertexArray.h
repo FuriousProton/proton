@@ -3,13 +3,14 @@
 //
 
 #pragma once
+#include "../utility.h"
 
 #include <vector>
 
 namespace proton {
     class Buffer;
 
-    class VertexArray {
+    class PROTON_API VertexArray {
     private:
         unsigned int mArrayID;
         std::vector<Buffer *> mBufferList;

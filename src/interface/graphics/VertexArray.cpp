@@ -3,8 +3,8 @@
 //
 
 #include <glbinding/gl/gl.h>
-#include "VertexArray.h"
-#include "Buffer.h"
+#include "../../../include/interface/VertexArray.h"
+#include "../../../include/interface/Buffer.h"
 namespace proton{
     using namespace gl;
     VertexArray::VertexArray() {

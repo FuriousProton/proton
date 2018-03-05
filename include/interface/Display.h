@@ -3,11 +3,12 @@
 //
 
 #pragma once
+#include "../utility.h"
 
 class GLFWwindow;
 class GLFWmonitor;
 namespace proton {
-    class Display {
+    class PROTON_API Display {
     private:
         GLFWwindow *mpWindow;
         GLFWmonitor **mpMonitors;

@@ -2,9 +2,9 @@
 // Created by teeebor on 2017-10-24.
 //
 #define GLM_ENABLE_EXPERIMENTAL
-#include "../entity/Entity.h"
+#include "../../../include/entity/Entity.h"
 
-#include "Transform.h"
+#include "../../../include/component/Transform.h"
 #include <glm/gtx/transform.hpp>
 #include <glm/mat4x4.hpp>
 namespace proton {

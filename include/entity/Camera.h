@@ -4,12 +4,14 @@
 
 #pragma once
 
+#include "../utility.h"
+
 #include <glm/gtc/type_ptr.hpp>
 
 #include "Entity.h"
 
 namespace proton {
-    class Camera : public Entity {
+    class PROTON_API Camera : public Entity {
     private:
         float mFrameWidth, mFrameHeight, mFov, mNear, mFar;
         glm::mat4 mProjectionMatrix;

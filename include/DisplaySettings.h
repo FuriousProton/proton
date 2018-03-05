@@ -3,10 +3,10 @@
 //
 
 #pragma once
-#include "../utility.h"
+#include "utility.h"
 
 
-struct DisplaySettings{
+struct PROTON_API DisplaySettings{
 /***
  * @TODO: Event for changing values
  */

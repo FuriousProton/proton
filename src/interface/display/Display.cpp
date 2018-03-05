@@ -1,12 +1,13 @@
 //
 // Created by teeebor on 2017-10-05.
 //
-
-#include "Display.h"
+#include "../../../include/utility.h"
+#include "../../../include/interface/Display.h"
 #include <glbinding/Binding.h>
 #include <GLFW/glfw3.h>
-#include "../../utility.h"
-#include "../../engine/Proton.h"
+#include "../../../include/Proton.h"
+#include "../../../include/CustomEvent.h"
+#include "../../../include/EventManager.h"
 #include <math.h>
 
 namespace proton {
@@ -40,6 +41,7 @@ namespace proton {
         }
         glfwMakeContextCurrent(mpWindow);
         glfwSetWindowUserPointer(mpWindow, this);
+//        glfwSwapInterval(60);
 //region event callbacks
         auto mousecallback = [](GLFWwindow *w, int a, int b, int c) {
             static_cast<Display *>(glfwGetWindowUserPointer(w))->mouse_button_callback(a, b, c);
@@ -67,10 +69,10 @@ namespace proton {
         glfwSetKeyCallback(mpWindow, keycallback);
         glfwSetCursorPosCallback(mpWindow, cursorcallback);
 //endregion
-
+        EventManager::getInstance().createEvent("CURSOR");
+        EventManager::getInstance().createEvent("INPUT");
         glbinding::Binding::initialize();
         LOG("OpenGL version",glGetString(GL_VERSION));
-
         return true;
     }
 
@@ -92,11 +94,15 @@ namespace proton {
     }
 
     void Display::cursor_position_callback(double xpos, double ypos) {
+        MoveEvent *e = new MoveEvent(xpos,ypos);
+        EventManager::getInstance().fire("CURSOR", e );
  //       LOG("MOUSE", "MOVE X: " << xpos << "; Y: " << ypos);
     }
 
     void Display::key_callback(int key, int scancode, int action, int mods) {
         Proton::keyStates[key]=action;
+        KeyEvent *e = new KeyEvent(key, scancode, action, mods);
+        EventManager::getInstance().fire("INPUT", e );
 //        LOG("KEYBOARD", "KEY: " << key << " SCAN: " << scancode << " ACTION: " << action);
     }
 
@@ -149,7 +155,7 @@ namespace proton {
     }
 
     void Display::clear() {
-       glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+        glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
     }
 
 }

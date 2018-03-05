@@ -4,10 +4,22 @@
 
 #pragma once
 
+#define PROTON_LIB
+
+#ifdef PROTON_LIB
+    #ifdef EXPORT_LIB
+        #define PROTON_API __declspec(dllexport)
+    #else
+        #define PROTON_API __declspec(dllimport)
+    #endif
+#else
+    #define PROTON_API
+#endif
+
 #include <iostream>
 
 #define LOG(type, message) std::cout<<"["<<type<<"]\t"<<message<<std::endl
-#define errorCheck(c)({GLenum err; err = glGetError();if(err!=GL_NO_ERROR)std::cout<<"_______________________________________________________________"<<std::endl<<"["<<c<<"] THERE WAS AN ERROR: "<<err<<std::endl<<"_______________________________________________________________"<<std::endl;})
+#define errorCheck(c)({gl::GLenum err; err = gl::glGetError();if(err!=gl::GL_NO_ERROR)std::cout<<"_______________________________________________________________"<<std::endl<<"["<<c<<"] THERE WAS AN ERROR: "<<err<<std::endl<<"_______________________________________________________________"<<std::endl;})
 
 #define FULLSCREEN 0x00
 #define FULLSCREEN_WINDOWED 0x01

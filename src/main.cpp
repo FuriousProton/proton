@@ -1,18 +1,17 @@
-#include <GLFW/glfw3.h>
 
-#include "utility.h"
-#include "engine/DisplaySettings.h"
-#include "engine/Proton.h"
-#include "engine/entity/Entity.h"
-#include "engine/component/Renderer.h"
-#include "engine/Scene.h"
-#include "interface/graphics/IndexBuffer.h"
-#include "interface/graphics/VertexArray.h"
-#include "interface/graphics/Buffer.h"
-#include "engine/entity/Camera.h"
-#include "engine/component/Transform.h"
+#include "../include/component/Renderer.h"
+#include "../include/utility.h"
+#include "../include/DisplaySettings.h"
+#include "../include/Proton.h"
+#include "../include/entity/Entity.h"
+#include "../include/Scene.h"
+#include "../include/interface/IndexBuffer.h"
+#include "../include/interface/VertexArray.h"
+#include "../include/interface/Buffer.h"
+#include "../include/entity/Camera.h"
+#include "../include/component/Transform.h"
 #include "engine/component/DemoComponent.h"
-#include "interface/io/FileLoader.h"
+#include "../include/io/FileLoader.h"
 #include "engine/component/Move.h"
 
 #define CHAI
@@ -71,7 +70,8 @@ int main()
      vao.addBuffer(&colors, 3);
     r->setModel(&ibo, &vao);*/
 
-        std::vector<Renderer *> renderer=FileLoader::loadModel("house/house.obj");
+        std::vector<Renderer *> renderer=FileLoader::loadModel("frigate3.obj");
+//        std::vector<Renderer *> renderer=FileLoader::loadModel("house/house.fbx");
 //        std::vector<Renderer *> renderer2=FileLoader::loadModel("dragon.obj");
 //        renderer.push_back(renderer2[0]);
         if(!renderer.empty()){

@@ -3,6 +3,7 @@
 //
 
 #pragma once
+#include "../utility.h"
 
 #include <vector>
 
@@ -10,7 +11,7 @@ namespace proton{
     class Transform;
     class Component;
     class Renderer;
-    class Entity {
+    class PROTON_API Entity {
     protected:
         Entity *mpParent;
         Transform *mpTransform;

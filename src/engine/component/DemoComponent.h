@@ -5,7 +5,7 @@
 #pragma once
 
 
-#include "Component.h"
+#include "../../../include/component/Component.h"
 
 namespace proton {
     class DemoComponent : public Component {

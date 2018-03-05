@@ -13,28 +13,15 @@ ExternalProject_Add(glfw_module
         INSTALL_COMMAND ""
         TEST_COMMAND ""
         )
-#[[
-add_custom_command(TARGET glfw_module POST_BUILD        # Adds a post-build event to MyTest
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different     # which executes "cmake - E copy_if_different..."
-        "${CMAKE_CURRENT_SOURCE_DIR}/temp/glfw/src/glfw3.dll"                   # <--this is in-file
-        $<TARGET_FILE_DIR:proton>)                 # <--this is out-file path
 
-]]
+
+ExternalProject_Add_Step(
+        glfw_module CopyToBin
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_CURRENT_SOURCE_DIR}/temp/glfw/src/glfw3.dll" $<TARGET_FILE_DIR:proton>
+        DEPENDEES install
+)
 #add_definitions(-O1)
-ExternalProject_Add(ozz_module
-        GIT_SUBMODULES "submodule/ozz-animation"
-        DOWNLOAD_COMMAND git submodule update --recursive
-        SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/submodule/ozz-animation"
-        BINARY_DIR "${CMAKE_CURRENT_SOURCE_DIR}/temp/ozz-animation"
-        CMAKE_ARGS
-        -Dozz_build_cpp11=ON
-        -Dozz_build_msvc_rt_dll=OFF
-        -Dozz_build_howtos=OFF
-        -Dozz_build_samples=OFF
-        UPDATE_COMMAND ""
-        INSTALL_COMMAND ""
-        TEST_COMMAND ""
-        )
+
 ExternalProject_Add(assimp_module
         GIT_SUBMODULES "submodule/assimp"
         DOWNLOAD_COMMAND git submodule update --recursive
@@ -52,13 +39,14 @@ ExternalProject_Add(assimp_module
         INSTALL_COMMAND ""
         TEST_COMMAND ""
         )
-#[[
-add_custom_command(TARGET assimp_module POST_BUILD        # Adds a post-build event to MyTest
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different     # which executes "cmake - E copy_if_different..."
-        "${CMAKE_CURRENT_SOURCE_DIR}/temp/assimp/code/libassimp.dll"                   # <--this is in-file
-        $<TARGET_FILE_DIR:proton>)                 # <--this is out-file path
 
-]]
+
+ExternalProject_Add_Step(
+        assimp_module CopyToBin
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_CURRENT_SOURCE_DIR}/temp/assimp/code/libassimp.dll" $<TARGET_FILE_DIR:proton>
+        DEPENDEES install
+)
+
 
 ExternalProject_Add(chai_module
         GIT_SUBMODULES "submodule/glfw"
@@ -93,3 +81,19 @@ ExternalProject_Add(glbinding_module
         INSTALL_COMMAND ""
         TEST_COMMAND ""
         )
+
+
+ExternalProject_Add(soil_module
+    URL http://www.lonesock.net/files/soil.zip
+    UPDATE_COMMAND ""
+    PATCH_COMMAND ""
+    SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/submodule/soil"
+    BINARY_DIR "${CMAKE_CURRENT_SOURCE_DIR}/temp/soil"
+    CONFIGURE_COMMAND ""
+
+    BUILD_COMMAND
+    INSTALL_COMMAND ""
+    TEST_COMMAND ""
+  )
+
+#

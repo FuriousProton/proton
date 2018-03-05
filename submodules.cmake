@@ -28,10 +28,22 @@ set(ASSIMP_LIB ${CMAKE_CURRENT_SOURCE_DIR}/temp/assimp/code/libassimp.dll.a)
 set(ASSIMP_INCLUDE ${LIB_DIR}/assimp/include ${CMAKE_CURRENT_SOURCE_DIR}/temp/assimp/include)
 
 #chaiscript
-
 set(CHAI_INCLUDE ${LIB_DIR}/chaiscript/include)
 set(CHAI_LIB ${CMAKE_CURRENT_SOURCE_DIR}/temp/chaiscript/libstdlib.a
         ${CMAKE_CURRENT_SOURCE_DIR}/temp/chaiscript/libparser.a)
+
+
+#soil
+set(SOIL ${LIB_DIR}/soil/src)
+set(SOIL_INCLUDE ${SOIL})
+
+set(SOIL_SOURCES
+        ${SOIL}/image_DXT.c ${SOIL}/image_DXT.h
+        ${SOIL}/image_helper.c ${SOIL}/image_helper.h
+        ${SOIL}/SOIL.c ${SOIL}/SOIL.h
+        ${SOIL}/stb_image_aug.c ${SOIL}/stb_image_aug.h
+        ${SOIL}/stbi_DDS_aug_c.h ${SOIL}/stbi_DDS_aug.h
+        )
 
 include_directories(
         ${GLM_INCLUDE}
@@ -39,6 +51,7 @@ include_directories(
         ${GLFW_INCLUDE}
         ${CHAI_INCLUDE}
         ${ASSIMP_INCLUDE}
+        ${SOIL_INCLUDE}
 )
 
 set(LINKER

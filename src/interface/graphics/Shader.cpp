@@ -2,13 +2,12 @@
 // Created by teeebor on 2017-10-05.
 //
 
-#include "Shader.h"
+#include "../../../include/interface/Shader.h"
 #include <glbinding/gl/gl.h>
-#include "../../utility.h"
+#include "../../../include/utility.h"
 
 namespace proton {
     void Shader::load(std::string *shaders) {
-        using namespace gl;
         id = glCreateProgram();
         unsigned int fragID = 0;
         unsigned int vertID = 0;
@@ -18,7 +17,6 @@ namespace proton {
         }
         if (!shaders[1].empty()) {
             fragID = buildShader(shaders[1], GL_FRAGMENT_SHADER);
-
         }
         if (!shaders[2].empty()) {
             geomID = buildShader(shaders[2], GL_GEOMETRY_SHADER);
@@ -81,7 +79,7 @@ namespace proton {
             }
         }
         int uid = glGetUniformLocation(id,name);
-        Uniform *u=new Uniform(name,uid);
+        UniformData *u=new UniformData(name,uid);
         mUniforms.push_back(u);
         LOG("SHADER_LOADER", "Requesting uniform "<<name<<" (#"<<u->ID<<")");
         return static_cast<unsigned int>(u->ID);
@@ -150,9 +148,6 @@ namespace proton {
         glUseProgram(0);
     }
 
-    void Shader::loadData() {
-    //    LOG("SHADER_ERR","NOT IMPLEMENTED");
-    }
 
     Shader::Shader() {
     }

@@ -3,7 +3,7 @@
 //
 
 #include "DemoComponent.h"
-#include "Transform.h"
+#include "../../../include/component/Transform.h"
 
 void proton::DemoComponent::start() {
     Component::start();

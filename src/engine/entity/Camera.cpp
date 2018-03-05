@@ -4,10 +4,10 @@
 
 #include <glbinding/gl/gl.h>
 #include <glm/gtc/matrix_transform.hpp>
-#include "Camera.h"
-#include "../component/Transform.h"
-#include "../Scene.h"
-#include "../../utility.h"
+#include "../../../include/entity/Camera.h"
+#include "../../../include/component/Transform.h"
+#include "../../../include/Scene.h"
+#include "../../../include/utility.h"
 
 namespace proton {
     using namespace gl;
