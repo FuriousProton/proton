@@ -43,4 +43,8 @@ namespace proton{
         }
         return false;
     }
+
+    BaseInput *Component::Input(int input) {
+        return mpEntity->getInput()->Get(input);
+    }
 }

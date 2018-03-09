@@ -1,19 +1,19 @@
 //
 // Created by teeebor on 2017-10-05.
 //
+#include <glbinding/Binding.h>
 #include "../../../include/utility.h"
 #include "../../../include/interface/Display.h"
-#include <glbinding/Binding.h>
 #include <GLFW/glfw3.h>
 #include "../../../include/Proton.h"
 #include "../../../include/CustomEvent.h"
 #include "../../../include/EventManager.h"
-#include <math.h>
+#include <cmath>
 
 namespace proton {
     Display::Display(int width, int height, const char *title) : mWidth(width), mHeight(height), mTitle(title),
                                                                  mpWindow(nullptr) {
-
+        mpInput=Input::getInstance();
     }
 
     Display::~Display() {
@@ -102,6 +102,9 @@ namespace proton {
     void Display::key_callback(int key, int scancode, int action, int mods) {
         Proton::keyStates[key]=action;
         KeyEvent *e = new KeyEvent(key, scancode, action, mods);
+
+        Input::getInstance()->setInput(key,GLFW_INPUT_TO_PROTON(action));
+
         EventManager::getInstance().fire("INPUT", e );
 //        LOG("KEYBOARD", "KEY: " << key << " SCAN: " << scancode << " ACTION: " << action);
     }
@@ -156,6 +159,10 @@ namespace proton {
 
     void Display::clear() {
         glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+    }
+
+    Input *Display::input() {
+        return mpInput;
     }
 
 }

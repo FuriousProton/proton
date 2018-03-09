@@ -4,6 +4,7 @@
 
 #pragma once
 #include "../utility.h"
+#include "../io/Input.h"
 
 class GLFWwindow;
 class GLFWmonitor;
@@ -12,6 +13,7 @@ namespace proton {
     private:
         GLFWwindow *mpWindow;
         GLFWmonitor **mpMonitors;
+        Input *mpInput;
         int monitorCount;
         int activeMonitor;
 
@@ -26,7 +28,7 @@ namespace proton {
         ~Display();
 
         void update();
-
+        Input *input();
         bool closed();
         void clear();
 

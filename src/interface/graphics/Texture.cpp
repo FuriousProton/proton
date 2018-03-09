@@ -4,6 +4,7 @@
 
 #include "../../../include/interface/Texture.h"
 #include "../../../include/utility.h"
+#include "../../../include/Proton.h"
 #include <SOIL.h>
 
 proton::Texture::Texture(const char *path, int l) {
@@ -15,26 +16,26 @@ proton::Texture::Texture(const char *path, int l) {
         location=TEXTURE_ENUMS[l];
     }
     int width=0, height=0;
-    errorCheck("before texture init");
+    Proton::errorcheck("before texture init");
     unsigned char* image = SOIL_load_image(path, &width, &height, 0, SOIL_LOAD_RGB);
 
 
     glGenTextures(1,&textureID);
-    errorCheck("after texture init");
+    Proton::errorcheck("after texture init");
 
     bind();
-    errorCheck("after texture bind");
+    Proton::errorcheck("after texture bind");
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
-    errorCheck("after texture align");
+    Proton::errorcheck("after texture align");
     LOG("width",width);
     LOG("height",height);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
 
-    errorCheck("after texture teximage");
+    Proton::errorcheck("after texture teximage");
     SOIL_free_image_data(image);
 
-    errorCheck("after texture imiz  load");
+    Proton::errorcheck("after texture imiz  load");
     if (0 > textureID)
     {
         LOG("TEXTURE ERROR",SOIL_last_result());

@@ -32,6 +32,7 @@
 #include "../../../include/component/Renderer.h"
 #include "../../../include/interface/IndexBuffer.h"
 #include "../../../include/interface/Texture.h"
+#include "../../../include/Proton.h"
 
 namespace proton {
     std::string FileLoader::readFile(const char *path) {
@@ -80,10 +81,10 @@ namespace proton {
                 shaderContent[currentshader] += line + "\n";
             }
         }
-        errorCheck("before shader load");
+        Proton::errorcheck("before shader load");
 
         shader->load(shaderContent);
-        errorCheck("shader load");
+        Proton::errorcheck("shader load");
 
         return shader;
     }
@@ -107,7 +108,7 @@ namespace proton {
 
             std::string path =  std::regex_replace (model,std::regex("([a-zA-Z0-9\\.\\_\\-\\s]+)\\.(OBJ|FBX|STL|obj|fbx|stl)$"),"/");
             LOG("DIR",current_working_dir);
-            errorCheck("before texture load");
+            Proton::errorcheck("before texture load");
             Texture *textures[_scene->mNumTextures];
             if (_scene->HasMaterials()) {
                 for (unsigned int i = 0; i < _scene->mNumMaterials; i++) {
@@ -123,7 +124,7 @@ namespace proton {
                         s.append(texturePath.C_Str());
                         textures[i] = new Texture(s.c_str(), 0);
                         LOG("TEXTURE",textures[i]->getTextureID());
-                        errorCheck("texture load");
+                        Proton::errorcheck("texture load");
                     }
 
                 }
@@ -147,35 +148,35 @@ namespace proton {
 
 
                     auto *r = new Renderer(material);
-                    errorCheck("shader");
+                    Proton::errorcheck("shader");
 
                     auto *ibo = new IndexBuffer(faceArray, faceCount * 3);
-                    errorCheck("ibo");
+                    Proton::errorcheck("ibo");
                     auto *vao = new VertexArray();
 
-                    errorCheck("vao");
+                    Proton::errorcheck("vao");
                     int count = mesh->mNumVertices * 3;
                     vao->addBuffer(new Buffer(mesh->mVertices, count, 3), 0);
-                    errorCheck("verticle");
+                    Proton::errorcheck("verticle");
                     if (mesh->HasNormals()) {
                         vao->addBuffer(new Buffer(mesh->mNormals, count, 3), 2);
-                        errorCheck("normal");
+                        Proton::errorcheck("normal");
 
                     }
                     if (mesh->HasTextureCoords(0)) {
                         vao->addBuffer(new Buffer(mesh->mTextureCoords[0], mesh->mNumVertices*3, 3), 1);
-                        errorCheck("texture");
+                        Proton::errorcheck("texture");
 
                     }
                     int textureID = mesh->mMaterialIndex;
                     if (textureID >= 0 && textureID < _scene->mNumTextures) {
                         r->setTexture(textures[textureID]);
-                        errorCheck("texture_load");
+                        Proton::errorcheck("texture_load");
                     }
                     r->setModel(ibo, vao);
                     renderers.push_back(r);
 
-                    errorCheck("LOAD");
+                    Proton::errorcheck("LOAD");
                 }
             }
         } else {

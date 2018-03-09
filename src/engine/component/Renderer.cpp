@@ -2,10 +2,11 @@
 // Created by teeebor on 2017-10-25.
 //
 
+#include <glbinding/gl/gl.h>
+
 #include "../../../include/component/Renderer.h"
 #include "../../../include/component/Component.h"
 #include "../../../include/component/Transform.h"
-#include <glbinding/gl/gl.h>
 #include "../../../include/io/FileLoader.h"
 #include "../../../include/interface/Shader.h"
 #include "../../../include/interface/VertexArray.h"

@@ -18,8 +18,13 @@
 
 #include <iostream>
 
+#ifndef GL_NO_ERROR
+
+#include <glbinding/gl/gl.h>
+
+#endif
+
 #define LOG(type, message) std::cout<<"["<<type<<"]\t"<<message<<std::endl
-#define errorCheck(c)({gl::GLenum err; err = gl::glGetError();if(err!=gl::GL_NO_ERROR)std::cout<<"_______________________________________________________________"<<std::endl<<"["<<c<<"] THERE WAS AN ERROR: "<<err<<std::endl<<"_______________________________________________________________"<<std::endl;})
 
 #define FULLSCREEN 0x00
 #define FULLSCREEN_WINDOWED 0x01

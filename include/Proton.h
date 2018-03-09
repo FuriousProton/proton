@@ -16,13 +16,14 @@ class PROTON_API Proton {
 private:
     proton::Display *mDisplay;
     std::vector<proton::Entity*> mEntities;
+    static Proton *activeInstance;
 public:
     static std::map<int, int> keyStates;
     /**
      * Main loop
      */
     void startLoop();
-
+    static void errorcheck(const char* label);
     void loopChilds(proton::Entity *e);
     /**
      * Creating display

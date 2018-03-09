@@ -55,7 +55,7 @@ namespace proton{
         int getUniformLocation(const char *name);
 
     private:
-        unsigned int buildShader(std::string &content, GLenum shaderType);
+        unsigned int buildShader(std::string &content, gl::GLenum shaderType);
     };
 }
 

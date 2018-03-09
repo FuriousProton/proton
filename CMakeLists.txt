@@ -27,7 +27,7 @@ set(SOURCE_FILES src/interface/display/Display.cpp
         src/engine/entity/Entity.cpp include/entity/Entity.h
         src/interface/graphics/IndexBuffer.cpp include/interface/IndexBuffer.h
         src/interface/graphics/VertexArray.cpp include/interface/VertexArray.h
-        src/engine/Scene.cpp include/Scene.h src/engine/entity/Camera.cpp include/entity/Camera.h src/engine/component/DemoComponent.cpp src/engine/component/DemoComponent.h src/engine/component/Move.cpp src/engine/component/Move.h src/interface/graphics/Uniform.cpp include/interface/Uniform.h src/interface/graphics/Texture.cpp include/interface/Texture.h include/CustomEvent.h include/EventManager.h src/interface/io/EventManager.cpp)
+        src/engine/Scene.cpp include/Scene.h src/engine/entity/Camera.cpp include/entity/Camera.h src/engine/component/DemoComponent.cpp src/engine/component/DemoComponent.h src/engine/component/Move.cpp src/engine/component/Move.h src/interface/graphics/Uniform.cpp include/interface/Uniform.h src/interface/graphics/Texture.cpp include/interface/Texture.h include/CustomEvent.h include/EventManager.h src/interface/io/EventManager.cpp include/io/Input.h src/interface/io/Input.cpp)
 include(submodules.cmake)
 include(cmake/dependencies.cmake)
 
