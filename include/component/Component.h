@@ -13,7 +13,6 @@ namespace proton {
     protected:
         Entity *mpEntity{};
     public:
-
         virtual void start();
 
         virtual void update();
@@ -21,7 +20,8 @@ namespace proton {
         virtual void end();
 
         Entity &getEntity();
-
+        ///
+        /// \param e
         void setEntity(Entity *e);
         BaseInput *Input(int key);
         bool getKeyDown(int key);

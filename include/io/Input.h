@@ -22,8 +22,10 @@ public:
     BaseInput(int input);
 
     InputState state();
+///
+/// \param state
+/// \return
     bool is(int state);
-
     void setState(InputState state);
 };
 
