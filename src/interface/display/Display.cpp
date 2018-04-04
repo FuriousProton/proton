@@ -10,10 +10,12 @@
 #include "../../../include/EventManager.h"
 #include <cmath>
 
+
 namespace proton {
     Display::Display(int width, int height, const char *title) : mWidth(width), mHeight(height), mTitle(title),
                                                                  mpWindow(nullptr) {
-        mpInput=Input::getInstance();
+        mpInput = Input::getInstance();
+        updateTime();
     }
 
     Display::~Display() {
@@ -32,8 +34,8 @@ namespace proton {
         activeMonitor = 0;
         //@TODO create manager for the monitor and share parameter
 
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR,4);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR,6);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
         mpWindow = glfwCreateWindow(mWidth, mHeight, mTitle, nullptr, nullptr);
         if (!mpWindow) {
             LOG("ERROR", "Failed to create the window!");
@@ -72,20 +74,26 @@ namespace proton {
         EventManager::getInstance().createEvent("CURSOR");
         EventManager::getInstance().createEvent("INPUT");
         glbinding::Binding::initialize();
-        LOG("OpenGL version",glGetString(GL_VERSION));
+
+        //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
+        //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;   // Enable Gamepad Controls
+
+        LOG("OpenGL version", glGetString(GL_VERSION));
         return true;
     }
 
 
     void Display::update() {
-        for(std::pair<const int, int> & state : Proton::keyStates){
-            if(state.second==0){
+        for (std::pair<const int, int> &state : Proton::keyStates) {
+            if (state.second == 0) {
                 Proton::keyStates.erase(state.first);
             }
         }
+        mpInput->update();
         glFlush();
         glfwSwapBuffers(mpWindow);
         glfwPollEvents();
+        updateTime();
     }
 
 
@@ -94,28 +102,30 @@ namespace proton {
     }
 
     void Display::cursor_position_callback(double xpos, double ypos) {
-        MoveEvent *e = new MoveEvent(xpos,ypos);
-        EventManager::getInstance().fire("CURSOR", e );
- //       LOG("MOUSE", "MOVE X: " << xpos << "; Y: " << ypos);
+        MoveEvent *e = new MoveEvent(xpos, ypos);
+        LOG("Cursor", xpos<<" "<<ypos);
+        EventManager::getInstance().fire("CURSOR", e);
+        Input::getInstance()->setMouse(xpos, ypos);
     }
 
     void Display::key_callback(int key, int scancode, int action, int mods) {
-        Proton::keyStates[key]=action;
+        Proton::keyStates[key] = action;
         KeyEvent *e = new KeyEvent(key, scancode, action, mods);
 
-        Input::getInstance()->setInput(key,GLFW_INPUT_TO_PROTON(action));
+        Input::getInstance()->setInput(key, GLFW_INPUT_TO_PROTON(action));
 
-        EventManager::getInstance().fire("INPUT", e );
+        EventManager::getInstance().fire("INPUT", e);
 //        LOG("KEYBOARD", "KEY: " << key << " SCAN: " << scancode << " ACTION: " << action);
     }
 
     void Display::mouse_button_callback(int button, int action, int mods) {
- //       LOG("MOUSE", "CLICK");
+        Input::getInstance()->setMouseInput(button, GLFW_INPUT_TO_PROTON(action));
+        //       LOG("MOUSE", "CLICK");
     }
 
     void Display::window_resize(int width, int height) {
         resize(width, height);
-   //     LOG("WINDOW", "RESIZE WIDTH: " << width << "; HEIGHT: " << height);
+        //     LOG("WINDOW", "RESIZE WIDTH: " << width << "; HEIGHT: " << height);
     }
 
     void Display::setCursor(bool enabled) {
@@ -133,16 +143,17 @@ namespace proton {
 
         switch (fullscreenType) {
             case FULLSCREEN:
-                LOG("ERROR","Fullscreen mode not implemented...yet...");
+                LOG("ERROR", "Fullscreen mode not implemented...yet...");
                 break;
             default:
             case WINDOWED:
                 glfwSetWindowSize(mpWindow, mWidth, mHeight);
-                glfwSetWindowPos(mpWindow, (int)floor((mode->width-mWidth)/2.0), (int)floor((mode->height-mHeight)/2.0));
+                glfwSetWindowPos(mpWindow, (int) floor((mode->width - mWidth) / 2.0),
+                                 (int) floor((mode->height - mHeight) / 2.0));
                 break;
             case FULLSCREEN_WINDOWED:
                 glfwSetWindowSize(mpWindow, mode->width, mode->height);
-                resize(mode->width,mode->height);
+                resize(mode->width, mode->height);
                 glfwSetWindowPos(mpWindow, 0, 0);
                 break;
         }
@@ -165,4 +176,13 @@ namespace proton {
         return mpInput;
     }
 
+    double Display::FrameTime() {
+        return frameTime;
+    }
+
+    void Display::updateTime() {
+        clock_t now = clock();
+        frameTime = (double) (now - time) / CLOCKS_PER_SEC;
+        time = now;
+    }
 }

@@ -106,7 +106,14 @@ namespace proton {
             GetCurrentDir( buff, FILENAME_MAX );
             std::string current_working_dir(buff);
 
-            std::string path =  std::regex_replace (model,std::regex("([a-zA-Z0-9\\.\\_\\-\\s]+)\\.(OBJ|FBX|STL|obj|fbx|stl)$"),"/");
+            std::string fullPath = model;
+
+//            std::string path =  std::regex_replace (model,std::regex("([a-zA-Z0-9\\.\\_\\-\\s]+)\\.(OBJ|FBX|STL|obj|fbx|stl)$"),"");
+
+            std::size_t found = fullPath.find_last_of("/\\");
+
+            std::string path = fullPath.substr(0, found);
+            path.append("/");
             LOG("DIR",current_working_dir);
             Proton::errorcheck("before texture load");
             Texture *textures[_scene->mNumTextures];
@@ -115,7 +122,8 @@ namespace proton {
                     const aiMaterial *material = _scene->mMaterials[i];
                     int USECOLOR = 0;
                     aiString texturePath;
-                    unsigned int numTextures = material->GetTextureCount(aiTextureType_DIFFUSE);   // always 0
+                    aiMaterialProperty** properties = material->mProperties;
+                    unsigned int numTextures = material->GetTextureCount(aiTextureType_DIFFUSE);
 
                     if (material->GetTextureCount(aiTextureType_DIFFUSE) > 0 &&
                         material->GetTexture(aiTextureType_DIFFUSE, 0, &texturePath) == AI_SUCCESS) {
@@ -164,7 +172,7 @@ namespace proton {
 
                     }
                     if (mesh->HasTextureCoords(0)) {
-                        vao->addBuffer(new Buffer(mesh->mTextureCoords[0], mesh->mNumVertices*3, 3), 1);
+                        vao->addBuffer(new Buffer(mesh->mTextureCoords[0], count, 3), 1);
                         Proton::errorcheck("texture");
 
                     }

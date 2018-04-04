@@ -30,3 +30,4 @@ public:
 
     MoveEvent(double posX, double posY) : CustomEvent(), posX(posX), posY(posY) {}
 };
+

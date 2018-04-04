@@ -43,7 +43,7 @@ namespace proton {
         glm::mat4 rotationMat();
         glm::vec3 position();
 
-
+        glm::mat4 getTransformationMatrix(bool reversed);
         glm::mat4 getTransformationMatrix();
 
     private:

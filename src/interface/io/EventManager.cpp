@@ -18,7 +18,7 @@ Subscription *EventManager::createEvent(const char *name) {
 bool EventManager::subscribe(const char *name, EventFun callback, void *classPointer) {
     auto s = getSubscription(name);
     if (s != nullptr) {
-        LOG("EVENT SUB","FOUND SUB");
+//        LOG("EVENT SUB","FOUND SUB");
         s->addEvent(callback);
         s->classes.push_back(classPointer);
         return true;
@@ -27,10 +27,10 @@ bool EventManager::subscribe(const char *name, EventFun callback, void *classPoi
 }
 
 void EventManager::fire(const char *name, CustomEvent *e) {
-    LOG("FIRE EVENT",name);
+//    LOG("FIRE EVENT",name);
     auto s = getSubscription(name);
     if (s != nullptr) {
-        LOG("EVENT","FOUND SUB");
+//        LOG("EVENT","FOUND SUB");
         s->fire(e);
     }
 }

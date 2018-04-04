@@ -22,10 +22,12 @@ namespace proton {
 
 
     void Transform::move(double x, double y) {
+        setDirty();
         move(x, y, 0);
     }
 
     void Transform::move(glm::vec3 pos) {
+        setDirty();
         move(pos.x, pos.y, pos.z);
     }
 
@@ -81,20 +83,32 @@ namespace proton {
             }
     }
 
-    glm::mat4 Transform::getTransformationMatrix() {
+
+    glm::mat4 Transform::getTransformationMatrix(bool reversed) {
+
         mDirty = true;
         if (mDirty) {
             mDirty = false;
             glm::mat4 rotation = rotationMat();
-            glm::mat4 translate = glm::translate(glm::mat4(1.0f), mTransform);
+            glm::vec3 transform = mTransform;
+            if(reversed){
+                transform.x*=-1;
+                transform.y*=-1;
+                transform.z*=-1;
+            }
+            glm::mat4 translate = glm::translate(glm::mat4(1.0f), transform);
             glm::mat4 scale = glm::scale(glm::mat4(1.0f),mScale);
             mModel=  translate * rotation * scale;
 
-            if(mpEntity->parent()){
-                mModel=mpEntity->parent()->transform().getTransformationMatrix()*mModel;
+            if(mpEntity->parent() != nullptr){
+                mModel=mpEntity->parent()->transform().getTransformationMatrix(reversed)*mModel;
             }
         }
         return mModel;
+    }
+
+    glm::mat4 Transform::getTransformationMatrix() {
+        return getTransformationMatrix(false);
     }
 
     void Transform::update() {
@@ -112,7 +126,7 @@ namespace proton {
     glm::vec3 Transform::position() {
         return mTransform;
     }
-
+//@TODO this is wrong for the camera
     glm::mat4 Transform::rotationMat() {
 //        return glm::rotate(glm::mat4(1.f),1.f,mRotation);
         return glm::rotate(mRotation.x,glm::vec3(1,0,0)) *

@@ -28,7 +28,7 @@ namespace proton{
         Entity * parent();
         Transform &transform();
         void addComponent(Component *comp);
-        void addChild(Entity &child);
+        void addChild(Entity *child);
         Input *getInput();
     };
 

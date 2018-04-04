@@ -2,30 +2,28 @@
 set(LIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/submodule)
 
 
-set(glfw3_DIR ${LIB_DIR}/glfw)
+#set(glfw3_DIR ${LIB_DIR}/glfw)
 #GLM
 set(GLM_INCLUDE "${LIB_DIR}/glm")
 
-#IMGUI
-set(IMGUI "${LIB_DIR}/imgui")
+find_package(glfw3 REQUIRED)
 
-ADD_LIBRARY( IMGUI_LIB STATIC IMPORTED
-        ${IMGUI}/imgui.h ${IMGUI}/imgui.cpp ${IMGUI}/imgui_draw.cpp
-        ${IMGUI}/imgui_internal.h ${IMGUI}/imconfig.h ${IMGUI}/stb_rect_pack.h
-        ${IMGUI}/stb_textedit.h ${IMGUI}/stb_truetype.h )
+find_package(glbinding REQUIRED)
 
 #GLFW
-set(GLFW_INCLUDE ${LIB_DIR}/glfw/include)
-set(GLFW_LIB ${CMAKE_CURRENT_SOURCE_DIR}/temp/glfw/src/libglfw3dll.a)
+#set(GLFW_INCLUDE ${LIB_DIR}/glfw/include)
+#set(GLFW_LIB ${CMAKE_CURRENT_SOURCE_DIR}/temp/glfw/src/libglfw3dll.a)
+
+#add_library(glbinding STATIC IMPORTED)
 
 #GLBINDING
-set(GLBINDING_INCLUDE ${LIB_DIR}/glbinding/source/glbinding/include
+#[[set(GLBINDING_INCLUDE ${LIB_DIR}/glbinding/source/glbinding/include
         temp/glbinding/source/glbinding/include)
-set(GLBINDING_LIB ${CMAKE_CURRENT_SOURCE_DIR}/temp/glbinding/libglbinding.a)
+set(GLBINDING_LIB ${CMAKE_CURRENT_SOURCE_DIR}/temp/glbinding/libglbinding.a)]]
 
-#assimp
-set(ASSIMP_LIB ${CMAKE_CURRENT_SOURCE_DIR}/temp/assimp/code/libassimp.dll.a)
-set(ASSIMP_INCLUDE ${LIB_DIR}/assimp/include ${CMAKE_CURRENT_SOURCE_DIR}/temp/assimp/include)
+##assimp
+#set(ASSIMP_LIB ${CMAKE_CURRENT_SOURCE_DIR}/temp/assimp/code/libassimp.dll.a)
+#set(ASSIMP_INCLUDE ${LIB_DIR}/assimp/include ${CMAKE_CURRENT_SOURCE_DIR}/temp/assimp/include)
 
 #chaiscript
 set(CHAI_INCLUDE ${LIB_DIR}/chaiscript/include)
@@ -34,17 +32,12 @@ set(CHAI_LIB ${CMAKE_CURRENT_SOURCE_DIR}/temp/chaiscript/libstdlib.a
 
 
 #soil
-set(SOIL ${LIB_DIR}/soil/src)
-set(SOIL_INCLUDE ${SOIL})
-
-set(SOIL_SOURCES
-        ${SOIL}/image_DXT.c ${SOIL}/image_DXT.h
-        ${SOIL}/image_helper.c ${SOIL}/image_helper.h
-        ${SOIL}/SOIL.c ${SOIL}/SOIL.h
-        ${SOIL}/stb_image_aug.c ${SOIL}/stb_image_aug.h
-        ${SOIL}/stbi_DDS_aug_c.h ${SOIL}/stbi_DDS_aug.h
-        )
-
+#set(ASSIMP_INCLUDE ${LIB_DIR}/soil/inc)
+#set(SOIL_LIB ${LIB_DIR}/soil/lib/libSOIL.a)
+get_cmake_property(_variableNames VARIABLES)
+foreach (_variableName ${_variableNames})
+    message(STATUS "${_variableName}=${${_variableName}}")
+endforeach()
 include_directories(
         ${GLM_INCLUDE}
         ${GLBINDING_INCLUDE}
@@ -57,19 +50,39 @@ include_directories(
 set(LINKER
         ${GLBINDING_LIB}
         ${GLFW_LIB}
+        ${SOIL_LIB}
         ${ASSIMP_LIB}
-        ${CHAI_LIB}
-        ${IMGUI_LIB}
+        ${CHAI_LI}
+#        ${glbinding}
+        ${SOIL_LIB}
         )
 
-
-set(ARGUMENTS
+if(WIN32)
+    set(ARGUMENTS
         -fpermissive
         -static-libstdc++
         -static-libgcc
+        -lSOIL
         -lopengl32
         -lglu32
         -lz
         -lgdi32
+        -lassimp
         -Wwrite-strings
-   )
+    )
+    ELSE()
+    set(ARGUMENTS
+            -fpermissive
+            -static-libstdc++
+            -static-libgcc
+            -lSOIL
+            -lGL
+            -lGLU
+            -lz
+            glfw
+#            -lgdi32
+            -lassimp
+            -Wwrite-strings
+            glbinding::glbinding
+            )
+ENDIF()

@@ -5,40 +5,44 @@
 #include "../../../include/interface/Texture.h"
 #include "../../../include/utility.h"
 #include "../../../include/Proton.h"
-#include <SOIL.h>
+
+#define STB_IMAGE_IMPLEMENTATION
+
+#include <stb_image.h>
 
 proton::Texture::Texture(const char *path, int l) {
     using namespace gl;
 
-
-    LOG("LOADING TEXTURE",path);
-    if(l>=0 && l<32){
-        location=TEXTURE_ENUMS[l];
+    LOG("LOADING TEXTURE", path);
+    if (l >= 0 && l < 32) {
+        location = TEXTURE_ENUMS[l];
     }
-    int width=0, height=0;
     Proton::errorcheck("before texture init");
-    unsigned char* image = SOIL_load_image(path, &width, &height, 0, SOIL_LOAD_RGB);
 
+    int width, height, nrChannels;
+    unsigned char *data;
+    data = stbi_load(path, &width, &height, &nrChannels, 0);
 
-    glGenTextures(1,&textureID);
-    Proton::errorcheck("after texture init");
+    if(data && nrChannels>1){
+        LOG("Texture size: ", width << "; " << height << " channels: " << nrChannels);
+        glGenTextures(1, &textureID);
+        Proton::errorcheck("after texture init");
 
-    bind();
-    Proton::errorcheck("after texture bind");
-    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+        bind();
+        Proton::errorcheck("after texture bind");
+        glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
-    Proton::errorcheck("after texture align");
-    LOG("width",width);
-    LOG("height",height);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+        Proton::errorcheck("after texture align");
 
-    Proton::errorcheck("after texture teximage");
-    SOIL_free_image_data(image);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+        LOG("INFO", "after load");
+        Proton::errorcheck("after texture teximage");
+        stbi_image_free(data);
 
-    Proton::errorcheck("after texture imiz  load");
-    if (0 > textureID)
-    {
-        LOG("TEXTURE ERROR",SOIL_last_result());
+        Proton::errorcheck("after texture init  load");
+    }
+    else{
+        LOG("TEXTURE ERROR", path << " Cannot be loaded");
     }
 }
 

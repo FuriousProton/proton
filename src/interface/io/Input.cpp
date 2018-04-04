@@ -37,16 +37,14 @@ bool BaseInput::is(int state) {
 
 
 void Input::setInput(int input, InputState state) {
-    BaseInput *inp = nullptr;
-    for (BaseInput *i : inputs) {
-        if (i->m_Input == input) {
-            inp = i;
-        }
-    }
-    if (!inp) {
-        inp = new BaseInput(input);
-        inputs.push_back(inp);
-    }
+    auto inp = Get(input);
+    inp->setState(state);
+}
+void Input::setMouseInput(int button, InputState state) {
+    auto inp = GetMouseButton(button);
+//    if(state==RELEASE){
+//        change.push_back({inp, NONE});
+//    }
     inp->setState(state);
 }
 
@@ -59,6 +57,8 @@ void Input::update() {
             s.input->setState(InputState::NONE);
         }
     }
+    mouseMove->dX=0;
+    mouseMove->dY=0;
     change.clear();
 }
 
@@ -82,6 +82,17 @@ BaseInput* Input::Get(int input) {
     return inp;
 }
 
+BaseInput* Input::GetMouseButton(int input) {
+    for(BaseInput *i : mouseButtons){
+        if(i->m_Input == input){
+            return i;
+        }
+    }
+    BaseInput *inp = new BaseInput(input);
+    mouseButtons.push_back(inp);
+    return inp;
+}
+
 Input *Input::getInstance() {
     if(!Input::instance){
         Input::instance = new Input();
@@ -90,5 +101,22 @@ Input *Input::getInstance() {
 }
 
 Input::Input() {
+    mouseMove = new MouseMove();
+    mouseMove->dX=0;
+    mouseMove->dY=0;
+    mouseMove->x=0;
+    mouseMove->y=0;
     LOG("input","init");
 }
+
+void Input::setMouse(double x, double y){
+    mouseMove->dX = x-mouseMove->x;
+    mouseMove->dY = y-mouseMove->y;
+    mouseMove->x=x;
+    mouseMove->y=y;
+}
+
+MouseMove Input::Cursor() {
+    return *mouseMove;
+}
+

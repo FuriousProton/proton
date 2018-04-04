@@ -7,10 +7,18 @@
 #define PROTON_LIB
 
 #ifdef PROTON_LIB
-    #ifdef EXPORT_LIB
-        #define PROTON_API __declspec(dllexport)
+    #if (WIN32)
+        #ifdef EXPORT_LIB
+            #define PROTON_API __declspec(dllexport)
+        #else
+            #define PROTON_API __declspec(dllimport)
+        #endif
     #else
-        #define PROTON_API __declspec(dllimport)
+        #ifdef EXPORT_LIB
+            #define PROTON_API __attribute__((visibility("default")))
+        #else
+            #define PROTON_API
+        #endif
     #endif
 #else
     #define PROTON_API
@@ -24,7 +32,7 @@
 
 #endif
 
-#define LOG(type, message) std::cout<<"["<<type<<"]\t"<<message<<std::endl
+#define LOG(type, message) std::cout<<"["<<type<<"]\t"<<message<<"\n"
 
 #define FULLSCREEN 0x00
 #define FULLSCREEN_WINDOWED 0x01
@@ -40,19 +48,10 @@ b[0]=a[0];\
 b[1]=a[1];\
 b[2]=a[2];\
 }
-enum EVENT {
-    UPDATE,
-    RENDER,
 
-    KEYUP,
-    KEYDOWN,
-    KEYPRESS,
-    MOUSEUP,
-    MOUSEDOWN,
-    MOUSEPRESS,
-    MOUSEMOVE
+enum InputDevice{
+    MouseCursor
 };
-
 
 #define KEY_UNKNOWN   -1
 #define KEY_SPACE   32

@@ -24,9 +24,12 @@ namespace proton {
         /// \param e
         void setEntity(Entity *e);
         BaseInput *Input(int key);
+        BaseInput *MouseButton(int button);
+        MouseMove Cursor();
         bool getKeyDown(int key);
         bool getKeyUp(int key);
         bool getKeyPress(int key);
+        double Time();
     };
 
 }

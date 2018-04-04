@@ -5,7 +5,7 @@
 #pragma once
 #include "../utility.h"
 #include "../io/Input.h"
-
+#include <ctime>
 class GLFWwindow;
 class GLFWmonitor;
 namespace proton {
@@ -20,7 +20,8 @@ namespace proton {
         int mWidth;
         int mHeight;
         const char *mTitle;
-
+        clock_t time;
+        double frameTime;
     public:
         Display(int width, int height) : Display(width, height, "Window") {};
 
@@ -53,9 +54,12 @@ namespace proton {
         void resize(int width, int height);
         bool prepare();
 
+        double FrameTime();
 
 
     private:
+
+        void updateTime();
 
         void window_resize(int width, int height);
 

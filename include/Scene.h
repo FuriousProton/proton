@@ -12,11 +12,13 @@
 namespace proton{
     class Entity;
     class Camera;
+    class Display;
 }
 
 class PROTON_API Scene {
 private:
     Proton *proton;
+    proton::Display *mpDisplay;
 public:
     int mMainCamera;
     std::vector<proton::Entity *> mpEntityList;
@@ -24,11 +26,14 @@ public:
     static Scene *activeScene;
 
 public:
+    void start(proton::Display *display);
     Scene();
     ~Scene();
     void activate();
     proton::Camera *mainCamera();
-
+    void setMainCamera(proton::Camera *camera);
+    void addCamera(proton::Camera *camera);
+    double frameTime();
     void addEntity(proton::Entity *e);
     void removeEntity(proton::Entity *e);
 };

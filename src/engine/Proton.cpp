@@ -59,12 +59,14 @@ void Proton::startLoop() {
     while (!mDisplay->closed()) {
         mDisplay->clear();
         Scene *scene = Scene::activeScene;
+        scene->start(mDisplay);
         for (Entity *e : scene->mpEntityList) {
             loopChilds(e);
         }
         Proton::errorcheck("main loop");
         mDisplay->update();
     }
+    cleanUp();
 }
 
 void Proton::cleanUp() {

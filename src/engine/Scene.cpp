@@ -7,8 +7,13 @@
 #include "../../include/entity/Entity.h"
 #include "../../include/entity/Camera.h"
 #include "../../include/utility.h"
+#include "../../include/interface/Display.h"
+
 Scene *Scene::activeScene= nullptr;
 Scene::Scene() {
+    if(!activeScene){
+        activeScene=this;
+    }
     mMainCamera = -1;
 }
 
@@ -41,6 +46,7 @@ void Scene::addEntity(proton::Entity *e) {
     }
     mpEntityList.push_back(e);
 }
+
 
 void Scene::removeEntity(proton::Entity *e) {
     using namespace proton;
@@ -75,4 +81,32 @@ proton::Camera *Scene::mainCamera() {
         return mpCameraList[mMainCamera];
     }
     return nullptr;
+}
+
+void Scene::start(proton::Display *display) {
+    mpDisplay = display;
+}
+
+double Scene::frameTime() {
+    if(mpDisplay){
+        return mpDisplay->FrameTime();
+    }
+    return 0;
+}
+
+void Scene::setMainCamera(proton::Camera *camera) {
+    int i=0;
+    for(auto c : mpCameraList){
+        if(c==camera){
+            mMainCamera = i;
+        }
+        i++;
+    }
+}
+
+void Scene::addCamera(proton::Camera *camera) {
+    if(mpCameraList.empty()){
+        mMainCamera = 0;
+    }
+    mpCameraList.push_back(camera);
 }

@@ -64,20 +64,20 @@ namespace proton {
         return nullptr;
     }
 
-    void Entity::addChild(Entity &child) {
-        child.mpParent = this;
+    void Entity::addChild(Entity *child) {
+        child->mpParent = this;
 
-        if (nullptr != dynamic_cast<Camera *>(&child)) {
+        if (nullptr != dynamic_cast<Camera *>(child)) {
             LOG("Scene", "Adding camera");
             if (Scene::activeScene->mMainCamera < 0) {
 
                 LOG("Scene", "setting to main camera");
                 Scene::activeScene->mMainCamera = 0;
             }
-            Scene::activeScene->mpCameraList.push_back(dynamic_cast<Camera *>(&child));
+            Scene::activeScene->addCamera(dynamic_cast<Camera *>(child));
         }
 
-        mpChildList.push_back(&child);
+        mpChildList.push_back(child);
     }
 
     Input *Entity::getInput() {
