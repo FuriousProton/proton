@@ -33,7 +33,7 @@
 #endif
 
 #define LOG(type, message) std::cout<<"["<<type<<"]\t"<<message<<"\n"
-
+#define INFO(message) LOG("INFO",message)
 #define FULLSCREEN 0x00
 #define FULLSCREEN_WINDOWED 0x01
 #define WINDOWED 0x02

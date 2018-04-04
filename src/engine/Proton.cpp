@@ -25,13 +25,13 @@ bool Proton::createDisplay(DisplaySettings &displaySettings) {
     mDisplay = new proton::Display(displaySettings.width, displaySettings.height, displaySettings.title);
     if (mDisplay->prepare()) {
         mDisplay->setFullscreenType(displaySettings.fullScreenType);
+        Proton::errorcheck("Before GL_TEXTURE_2D");
+//        glEnable(GL_TEXTURE_2D);
+
+        Proton::errorcheck("AFTER GL_TEXTURE_2D");
         return true;
     }
-    Proton::errorcheck("Before GL_TEXTURE_2D");
 
-    glEnable(GL_TEXTURE_2D);
-
-    Proton::errorcheck("AFTER GL_TEXTURE_2D");
     return false;
 }
 

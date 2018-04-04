@@ -7,20 +7,22 @@ set(LIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/submodule)
 set(GLM_INCLUDE "${LIB_DIR}/glm")
 
 find_package(glfw3 REQUIRED)
+find_package(OpenGL REQUIRED)
 
 find_package(glbinding REQUIRED)
+if (WIN32)
 
-#GLFW
-#set(GLFW_INCLUDE ${LIB_DIR}/glfw/include)
-#set(GLFW_LIB ${CMAKE_CURRENT_SOURCE_DIR}/temp/glfw/src/libglfw3dll.a)
+    #GLFW
+    #[[set(GLFW_INCLUDE ${LIB_DIR}/glfw/include)
+    set(GLFW_LIB ${CMAKE_CURRENT_SOURCE_DIR}/temp/glfw/src/libglfw3dll.a)]]
 
-#add_library(glbinding STATIC IMPORTED)
+    #add_library(glbinding STATIC IMPORTED)
 
-#GLBINDING
-#[[set(GLBINDING_INCLUDE ${LIB_DIR}/glbinding/source/glbinding/include
-        temp/glbinding/source/glbinding/include)
-set(GLBINDING_LIB ${CMAKE_CURRENT_SOURCE_DIR}/temp/glbinding/libglbinding.a)]]
-
+    #GLBINDING
+    #[[set(GLBINDING_INCLUDE ${LIB_DIR}/glbinding/source/glbinding/include
+            temp/glbinding/source/glbinding/include)
+    set(GLBINDING_LIB ${CMAKE_CURRENT_SOURCE_DIR}/temp/glbinding/libglbinding.a)]]
+endif ()
 ##assimp
 #set(ASSIMP_LIB ${CMAKE_CURRENT_SOURCE_DIR}/temp/assimp/code/libassimp.dll.a)
 #set(ASSIMP_INCLUDE ${LIB_DIR}/assimp/include ${CMAKE_CURRENT_SOURCE_DIR}/temp/assimp/include)
@@ -37,40 +39,38 @@ set(CHAI_LIB ${CMAKE_CURRENT_SOURCE_DIR}/temp/chaiscript/libstdlib.a
 get_cmake_property(_variableNames VARIABLES)
 foreach (_variableName ${_variableNames})
     message(STATUS "${_variableName}=${${_variableName}}")
-endforeach()
+endforeach ()
 include_directories(
         ${GLM_INCLUDE}
-        ${GLBINDING_INCLUDE}
-        ${GLFW_INCLUDE}
         ${CHAI_INCLUDE}
         ${ASSIMP_INCLUDE}
         ${SOIL_INCLUDE}
 )
 
 set(LINKER
-        ${GLBINDING_LIB}
-        ${GLFW_LIB}
         ${SOIL_LIB}
         ${ASSIMP_LIB}
         ${CHAI_LI}
-#        ${glbinding}
         ${SOIL_LIB}
+        ${GLFW3_LIBRARY}
         )
 
-if(WIN32)
+if (WIN32)
     set(ARGUMENTS
-        -fpermissive
-        -static-libstdc++
-        -static-libgcc
-        -lSOIL
-        -lopengl32
-        -lglu32
-        -lz
-        -lgdi32
-        -lassimp
-        -Wwrite-strings
-    )
-    ELSE()
+            -fpermissive
+            -static-libstdc++
+            -static-libgcc
+            -lSOIL
+            -lopengl32
+            -lglu32
+            glbinding::glbinding
+
+            -lz
+            -lgdi32
+            -lassimp
+            -Wwrite-strings
+            )
+ELSE ()
     set(ARGUMENTS
             -fpermissive
             -static-libstdc++
@@ -80,9 +80,15 @@ if(WIN32)
             -lGLU
             -lz
             glfw
-#            -lgdi32
+            #            -lgdi32
             -lassimp
             -Wwrite-strings
             glbinding::glbinding
             )
-ENDIF()
+ENDIF ()
+
+get_cmake_property(_variableNames VARIABLES)
+list(SORT _variableNames)
+foreach (_variableName ${_variableNames})
+    message(STATUS "${_variableName}=${${_variableName}}")
+endforeach ()

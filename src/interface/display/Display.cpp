@@ -24,19 +24,27 @@ namespace proton {
 
     bool Display::prepare() {
         using namespace gl;
+        INFO("before init");
 
         if (!glfwInit()) {
             LOG("ERROR", "Failed to initialize GLFW!");
             return false;
         }
+        INFO("after init");
 
         mpMonitors = glfwGetMonitors(&monitorCount);
+        INFO("after monitor");
+
+
         activeMonitor = 0;
         //@TODO create manager for the monitor and share parameter
 
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 4);
         mpWindow = glfwCreateWindow(mWidth, mHeight, mTitle, nullptr, nullptr);
+        INFO("after glfwCreateWindow");
+
+
         if (!mpWindow) {
             LOG("ERROR", "Failed to create the window!");
             return false;
@@ -71,14 +79,18 @@ namespace proton {
         glfwSetKeyCallback(mpWindow, keycallback);
         glfwSetCursorPosCallback(mpWindow, cursorcallback);
 //endregion
+        Proton::errorcheck("after glfwMakeContextCurrent");
+
+        glbinding::Binding::initialize();
+        INFO("after glbinding include");
         EventManager::getInstance().createEvent("CURSOR");
         EventManager::getInstance().createEvent("INPUT");
-        glbinding::Binding::initialize();
+        LOG("OpenGL version", glGetString(GL_VERSION));
 
+        INFO("after version");
         //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
         //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;   // Enable Gamepad Controls
 
-        LOG("OpenGL version", glGetString(GL_VERSION));
         return true;
     }
 
