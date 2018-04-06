@@ -50,13 +50,16 @@ void Scene::addEntity(proton::Entity *e) {
 
 void Scene::removeEntity(proton::Entity *e) {
     using namespace proton;
-
+INFO("REMOVE");
     if (nullptr != dynamic_cast<Camera *>(e)) {
+        INFO("CAMERA");
         if (mpCameraList.size() == 1) {
+            INFO("Removing camera");
             mMainCamera = -1;
             LOG("Warning", "The main camera has been removed");
             mpCameraList.pop_back();
         } else {
+            INFO("Already camera");
             for (int i = 0; i < mpCameraList.size(); i++) {
                 if ((mpCameraList[i]) == e) {
                     LOG("Info", "Camera removed");
@@ -77,7 +80,9 @@ void Scene::removeEntity(proton::Entity *e) {
 }
 
 proton::Camera *Scene::mainCamera() {
+    INFO("getting camera");
     if(mMainCamera>=0 && mpCameraList.size()>=mMainCamera){
+        INFO("Camera found");
         return mpCameraList[mMainCamera];
     }
     return nullptr;
@@ -96,6 +101,7 @@ double Scene::frameTime() {
 
 void Scene::setMainCamera(proton::Camera *camera) {
     int i=0;
+    INFO("setting camera");
     for(auto c : mpCameraList){
         if(c==camera){
             mMainCamera = i;
@@ -105,6 +111,7 @@ void Scene::setMainCamera(proton::Camera *camera) {
 }
 
 void Scene::addCamera(proton::Camera *camera) {
+    INFO("adding camera");
     if(mpCameraList.empty()){
         mMainCamera = 0;
     }

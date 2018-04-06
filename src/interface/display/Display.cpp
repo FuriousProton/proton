@@ -32,7 +32,7 @@ namespace proton {
         }
         INFO("after init");
 
-        mpMonitors = glfwGetMonitors(&monitorCount);
+//        mpMonitors = glfwGetMonitors(&monitorCount);
         INFO("after monitor");
 
 
@@ -52,6 +52,9 @@ namespace proton {
         glfwMakeContextCurrent(mpWindow);
         glfwSetWindowUserPointer(mpWindow, this);
 //        glfwSwapInterval(60);
+
+#define Events
+#ifdef Events
 //region event callbacks
         auto mousecallback = [](GLFWwindow *w, int a, int b, int c) {
             static_cast<Display *>(glfwGetWindowUserPointer(w))->mouse_button_callback(a, b, c);
@@ -79,6 +82,7 @@ namespace proton {
         glfwSetKeyCallback(mpWindow, keycallback);
         glfwSetCursorPosCallback(mpWindow, cursorcallback);
 //endregion
+#endif
         Proton::errorcheck("after glfwMakeContextCurrent");
 
         glbinding::Binding::initialize();
@@ -90,7 +94,6 @@ namespace proton {
         INFO("after version");
         //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
         //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;   // Enable Gamepad Controls
-
         return true;
     }
 
@@ -151,6 +154,7 @@ namespace proton {
     }
 
     void Display::setFullscreenType(char fullscreenType) {
+/*
         const GLFWvidmode *mode = glfwGetVideoMode(mpMonitors[activeMonitor]);
 
         switch (fullscreenType) {
@@ -168,7 +172,7 @@ namespace proton {
                 resize(mode->width, mode->height);
                 glfwSetWindowPos(mpWindow, 0, 0);
                 break;
-        }
+        }*/
     }
 
     void Display::setDisplay(int index) {

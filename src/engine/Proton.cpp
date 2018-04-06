@@ -24,7 +24,9 @@ bool Proton::createDisplay(DisplaySettings &displaySettings) {
 
     mDisplay = new proton::Display(displaySettings.width, displaySettings.height, displaySettings.title);
     if (mDisplay->prepare()) {
-        mDisplay->setFullscreenType(displaySettings.fullScreenType);
+        INFO("INSIDE PREPARE");
+        //@TODO this is not working on intel
+        // mDisplay->setFullscreenType(displaySettings.fullScreenType);
         Proton::errorcheck("Before GL_TEXTURE_2D");
 //        glEnable(GL_TEXTURE_2D);
 
@@ -55,6 +57,7 @@ void Proton::loopChilds(proton::Entity *e) {
 void Proton::startLoop() {
     using namespace proton;
     using namespace gl;
+    INFO("Starting loop");
     activeInstance = this;
     while (!mDisplay->closed()) {
         mDisplay->clear();
@@ -80,11 +83,13 @@ void Proton::cleanUp() {
 
 
 void Proton::errorcheck(const char* label) {
+#ifdef ERRORCHECK
     gl::GLenum err;
     err = gl::glGetError();
     if(err!=GL_NO_ERROR)
         std::cout<<"_______________________________________________________________"<<std::endl
                  <<"["<<label<<"] THERE WAS AN ERROR: "<<err<<std::endl
                  <<"_______________________________________________________________"<<std::endl;
+#endif
 }
 

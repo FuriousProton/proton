@@ -14,7 +14,7 @@
 #include "../include/io/FileLoader.h"
 #include "engine/component/Move.h"
 
-#define CHAI
+//#define CHAI
 
 #ifdef CHAI
 #include <chaiscript/chaiscript.hpp>
@@ -46,41 +46,6 @@ int main()
         auto *e = new Entity();
         auto *r = new Renderer("simple.shader");
         scene->addEntity(c);
-#define IBO_LEN 3
-        unsigned int indexes[IBO_LEN] = {
-                0, 2, 1
-        };
-        IndexBuffer ibo(indexes, IBO_LEN);
-        VertexArray vao;
-#define VBO_LEN 9
-  /*      float vert[VBO_LEN] = {
-                -0.5f, 0,-10,
-                0.5f, 0, -10,
-                0, 0.5f, -10
-        };
-        float col[VBO_LEN] = {
-                1, 0, 0,
-                0, 1, 0,
-                0, 0, 1
-        };
-
-     Buffer verticles(vert, VBO_LEN, 3);
-     Buffer colors(col, VBO_LEN, 3);
-     vao.addBuffer(&verticles, 0);
-     vao.addBuffer(&colors, 3);
-    r->setModel(&ibo, &vao);*/
-
-        std::vector<Renderer *> renderer=FileLoader::loadModel("frigate3.obj");
-//        std::vector<Renderer *> renderer=FileLoader::loadModel("house/house.fbx");
-//        std::vector<Renderer *> renderer2=FileLoader::loadModel("dragon.obj");
-//        renderer.push_back(renderer2[0]);
-        if(!renderer.empty()){
-            for (auto &i : renderer) {
-                Entity *child=new Entity;
-                child->addComponent(i);
-                e->addChild(*child);
-            }
-        }
 
         c->transform().move(0,5,10);
         e->addComponent(new DemoComponent());

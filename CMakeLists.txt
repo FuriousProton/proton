@@ -34,15 +34,20 @@ set(SOURCE_FILES src/interface/display/Display.cpp
         src/engine/component/Move.h src/interface/graphics/Uniform.cpp include/interface/Uniform.h
         src/interface/graphics/Texture.cpp include/interface/Texture.h include/CustomEvent.h include/EventManager.h
         src/interface/io/EventManager.cpp include/io/Input.h src/interface/io/Input.cpp include/interface/GUI.h src/interface/GUI.cpp
+
+#        src/main.cpp src/engine/component/DemoComponent.cpp src/engine/component/DemoComponent.h
+#        src/engine/component/Move.cpp
+#        src/engine/component/Move.h
         )
 
 
 include(submodules.cmake)
 include(cmake/dependencies.cmake)
+
 add_library(proton SHARED ${SOURCE_FILES} ${IMGUI_SOURCES})
+#add_executable(proton ${SOURCE_FILES} ${IMGUI_SOURCES})
+
 target_compile_definitions(proton PRIVATE EXPORT_LIB=1)
 
-#add_executable(proton ${SOURCE_FILES} ${IMGUI_SOURCES} ${SOIL_SOURCES})
-
-target_link_libraries(proton ${LINKER} ${ARGUMENTS} -pg)
+target_link_libraries(proton ${LINKER} ${ARGUMENTS} )
 
