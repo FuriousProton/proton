@@ -8,11 +8,13 @@
 #include <ctime>
 class GLFWwindow;
 class GLFWmonitor;
+class ImGuiContext;
 namespace proton {
     class PROTON_API Display {
     private:
         GLFWwindow *mpWindow;
         GLFWmonitor **mpMonitors;
+        ImGuiContext *mpImGui;
         Input *mpInput;
         int monitorCount;
         int activeMonitor;

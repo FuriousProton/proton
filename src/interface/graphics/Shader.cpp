@@ -14,21 +14,27 @@ namespace proton {
         unsigned int geomID = 0;
         if (!shaders[0].empty()) {
             vertID = buildShader(shaders[0], GL_VERTEX_SHADER);
+            INFO("Loading fragment shader #"<<fragID);
         }
         if (!shaders[1].empty()) {
             fragID = buildShader(shaders[1], GL_FRAGMENT_SHADER);
+            INFO("Loading vertex shader #"<<vertID);
         }
         if (!shaders[2].empty()) {
             geomID = buildShader(shaders[2], GL_GEOMETRY_SHADER);
+            INFO("Loading geometry shader #"<<geomID);
         }
 
         if (fragID != 0) {
+            INFO("Attaching fragment shader #"<<fragID);
             glAttachShader(id, fragID);
         }
         if (vertID != 0) {
+            INFO("Attaching vertex shader #"<<vertID);
             glAttachShader(id, vertID);
         }
         if (geomID != 0) {
+            INFO("Attaching geometry shader #"<<geomID);
             glAttachShader(id, geomID);
         }
 
@@ -81,7 +87,7 @@ namespace proton {
         int uid = glGetUniformLocation(id,name);
         UniformData *u=new UniformData(name,uid);
         mUniforms.push_back(u);
-        LOG("SHADER_LOADER", "Requesting uniform "<<name<<" (#"<<u->ID<<")");
+        LOG("SHADER_LOADER", "Requesting uniform "<<name<<" (#"<<u->ID<<") Program #"<<id);
         return static_cast<unsigned int>(u->ID);
     }
 

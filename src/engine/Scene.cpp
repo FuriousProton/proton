@@ -80,9 +80,7 @@ INFO("REMOVE");
 }
 
 proton::Camera *Scene::mainCamera() {
-    INFO("getting camera");
     if(mMainCamera>=0 && mpCameraList.size()>=mMainCamera){
-        INFO("Camera found");
         return mpCameraList[mMainCamera];
     }
     return nullptr;

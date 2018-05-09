@@ -33,7 +33,7 @@ namespace proton{
     void Renderer::render() {
         mpShader->bind();
 
-        glDepthMask(GL_TRUE);
+        glDepthMask(1);
         if(Scene::activeScene){
             if(Scene::activeScene->mainCamera()){
                 mpShader->loadUniformMat4f("mvp.view",Scene::activeScene->mainCamera()->getViewMatrix());

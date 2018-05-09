@@ -8,6 +8,9 @@
 #include "../../../include/Proton.h"
 #include "../../../include/CustomEvent.h"
 #include "../../../include/EventManager.h"
+#include "../../../lib/imgui/imgui.h"
+#include "../../../lib/imgui/imgui_impl_glfw_gl3.h"
+#include "../../../lib/imgui/imgui_internal.h"
 #include <cmath>
 
 
@@ -19,6 +22,8 @@ namespace proton {
     }
 
     Display::~Display() {
+        ImGui_ImplGlfwGL3_Shutdown();
+        ImGui::DestroyContext(mpImGui);
         glfwTerminate();
     }
 
@@ -76,20 +81,31 @@ namespace proton {
             static_cast<Display *>(glfwGetWindowUserPointer(w))->cursor_position_callback(a, b);
         };
 
+        auto scrollCallback = [](GLFWwindow *w, double x, double y) {
+            ImGui_ImplGlfwGL3_ScrollCallback(w, x, y);
+        };
+        auto charCallback = [](GLFWwindow *w, unsigned int c) {
+            ImGui_ImplGlfwGL3_CharCallback(w, c);
+        };
 //        glfwSetMonitorCallback(monitorcallback);
         glfwSetMouseButtonCallback(mpWindow, mousecallback);
         glfwSetWindowSizeCallback(mpWindow, winresize);
         glfwSetKeyCallback(mpWindow, keycallback);
         glfwSetCursorPosCallback(mpWindow, cursorcallback);
+        glfwSetScrollCallback(mpWindow, scrollCallback);
+        glfwSetCharCallback(mpWindow, charCallback);
+
 //endregion
 #endif
         Proton::errorcheck("after glfwMakeContextCurrent");
-
         glbinding::Binding::initialize();
         INFO("after glbinding include");
         EventManager::getInstance().createEvent("CURSOR");
         EventManager::getInstance().createEvent("INPUT");
         LOG("OpenGL version", glGetString(GL_VERSION));
+
+        mpImGui = ImGui::CreateContext();
+        ImGui_ImplGlfwGL3_Init(mpWindow, false);
 
         INFO("after version");
         //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
@@ -99,6 +115,7 @@ namespace proton {
 
 
     void Display::update() {
+        ImGui::Render();
         for (std::pair<const int, int> &state : Proton::keyStates) {
             if (state.second == 0) {
                 Proton::keyStates.erase(state.first);
@@ -107,7 +124,6 @@ namespace proton {
         mpInput->update();
         glFlush();
         glfwSwapBuffers(mpWindow);
-        glfwPollEvents();
         updateTime();
     }
 
@@ -118,23 +134,34 @@ namespace proton {
 
     void Display::cursor_position_callback(double xpos, double ypos) {
         MoveEvent *e = new MoveEvent(xpos, ypos);
-        LOG("Cursor", xpos<<" "<<ypos);
+//        LOG("Cursor", xpos<<" "<<ypos);
         EventManager::getInstance().fire("CURSOR", e);
         Input::getInstance()->setMouse(xpos, ypos);
     }
 
     void Display::key_callback(int key, int scancode, int action, int mods) {
-        Proton::keyStates[key] = action;
-        KeyEvent *e = new KeyEvent(key, scancode, action, mods);
+        auto io = ImGui::GetIO();
+        if(io.WantTextInput == 1){
+            ImGui_ImplGlfwGL3_KeyCallback(mpWindow,key, scancode, action, mods);
+        }else{
+            Proton::keyStates[key] = action;
+            KeyEvent *e = new KeyEvent(key, scancode, action, mods);
 
-        Input::getInstance()->setInput(key, GLFW_INPUT_TO_PROTON(action));
+            Input::getInstance()->setInput(key, GLFW_INPUT_TO_PROTON(action));
 
-        EventManager::getInstance().fire("INPUT", e);
+            EventManager::getInstance().fire("INPUT", e);
+        }
+
 //        LOG("KEYBOARD", "KEY: " << key << " SCAN: " << scancode << " ACTION: " << action);
     }
 
     void Display::mouse_button_callback(int button, int action, int mods) {
-        Input::getInstance()->setMouseInput(button, GLFW_INPUT_TO_PROTON(action));
+        auto io = ImGui::GetIO();
+        if (io.WantCaptureMouse == 1) {
+            ImGui_ImplGlfwGL3_MouseButtonCallback(mpWindow, button, action, mods);
+        } else {
+            Input::getInstance()->setMouseInput(button, GLFW_INPUT_TO_PROTON(action));
+        }
         //       LOG("MOUSE", "CLICK");
     }
 
@@ -186,6 +213,8 @@ namespace proton {
 
     void Display::clear() {
         glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+        glfwPollEvents();
+        ImGui_ImplGlfwGL3_NewFrame();
     }
 
     Input *Display::input() {

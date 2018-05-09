@@ -9,12 +9,13 @@ add_definitions(-O0)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/bin")
-
 if(WIN32)
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/module")
 ENDIF()
 set(INCLUDE_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/include")
 add_definitions(-DEXPORT_LIB)
+add_definitions(-DIMGUI_EXPORTS)
+
 
 #Linking
 set(SOURCE_FILES src/interface/display/Display.cpp
@@ -38,7 +39,7 @@ set(SOURCE_FILES src/interface/display/Display.cpp
 #        src/main.cpp src/engine/component/DemoComponent.cpp src/engine/component/DemoComponent.h
 #        src/engine/component/Move.cpp
 #        src/engine/component/Move.h
-        )
+        include/io/Resource.h src/interface/io/Resource.cpp include/config.h include/io/FileSystem.h include/entity/Canvas.h)
 
 
 include(submodules.cmake)
