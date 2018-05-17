@@ -36,6 +36,7 @@ set(CHAI_LIB ${CMAKE_CURRENT_SOURCE_DIR}/temp/chaiscript/libstdlib.a
 set(IMGUI_PATH ${CMAKE_CURRENT_SOURCE_DIR}/lib/imgui)
 set(IMGUI_SOURCES ${IMGUI_PATH}/imconfig.h ${IMGUI_PATH}/imgui.cpp ${IMGUI_PATH}/imgui.h
         ${IMGUI_PATH}/imgui_draw.cpp ${IMGUI_PATH}/imgui_internal.h
+        ${IMGUI_PATH}/imgui_dock.cpp ${IMGUI_PATH}/imgui_dock.h
         ${IMGUI_PATH}/imgui_impl_glfw_gl3.cpp ${IMGUI_PATH}/imgui_impl_glfw_gl3.h)
 
 

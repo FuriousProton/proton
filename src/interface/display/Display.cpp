@@ -11,6 +11,7 @@
 #include "../../../lib/imgui/imgui.h"
 #include "../../../lib/imgui/imgui_impl_glfw_gl3.h"
 #include "../../../lib/imgui/imgui_internal.h"
+#include "../../../lib/imgui/imgui_dock.h"
 #include <cmath>
 
 
@@ -94,7 +95,8 @@ namespace proton {
         glfwSetCursorPosCallback(mpWindow, cursorcallback);
         glfwSetScrollCallback(mpWindow, scrollCallback);
         glfwSetCharCallback(mpWindow, charCallback);
-
+//VSYNC OFF
+        glfwSwapInterval(0);
 //endregion
 #endif
         Proton::errorcheck("after glfwMakeContextCurrent");
@@ -103,9 +105,9 @@ namespace proton {
         EventManager::getInstance().createEvent("CURSOR");
         EventManager::getInstance().createEvent("INPUT");
         LOG("OpenGL version", glGetString(GL_VERSION));
-
         mpImGui = ImGui::CreateContext();
         ImGui_ImplGlfwGL3_Init(mpWindow, false);
+        ImGui::InitDock();
 
         INFO("after version");
         //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls

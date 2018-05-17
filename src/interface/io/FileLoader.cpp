@@ -62,17 +62,17 @@ namespace proton {
         std::string line;
         while (input && getline(input, line)) {
             if (line.length() == 0) continue;
-            if (std::regex_match(line, std::regex("#vertex"))) {
+            if (line.find("#vertex") != std::string::npos) {
                 currentshader = 0;
                 LOG("SHADER", "loading vertex shader");
                 continue;
             }
-            if (std::regex_match(line, std::regex("#fragment"))) {
+            if (line.find("#fragment") != std::string::npos) {
                 currentshader = 1;
                 LOG("SHADER", "loading fragment shader");
                 continue;
             }
-            if (std::regex_match(line, std::regex("#geometry"))) {
+            if (line.find("#geometry") != std::string::npos) {
                 currentshader = 2;
                 LOG("SHADER", "loading geometry shader");
                 continue;
