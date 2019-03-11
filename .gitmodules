@@ -16,3 +16,6 @@
 [submodule "submodule/assimp"]
 	path = submodule/assimp
 	url = https://github.com/assimp/assimp
+[submodule "submodule/stb"]
+	path = submodule/stb
+	url = https://github.com/nothings/stb

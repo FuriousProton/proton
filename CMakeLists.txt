@@ -39,14 +39,17 @@ set(SOURCE_FILES src/interface/display/Display.cpp
 #        src/main.cpp src/engine/component/DemoComponent.cpp src/engine/component/DemoComponent.h
 #        src/engine/component/Move.cpp
 #        src/engine/component/Move.h
-        include/io/Resource.h src/interface/io/Resource.cpp include/config.h include/io/FileSystem.h include/entity/Canvas.h)
+#        include/io/Resource.h src/interface/io/Resource.cpp include/io/FileSystem.h
+        include/config.h
+#        include/entity/Canvas.h
+        )
 
 
 include(submodules.cmake)
 include(cmake/dependencies.cmake)
 
-add_library(proton SHARED ${SOURCE_FILES} ${IMGUI_SOURCES})
-#add_executable(proton ${SOURCE_FILES} ${IMGUI_SOURCES})
+#add_library(proton SHARED ${SOURCE_FILES} ${IMGUI_SOURCES})
+add_executable(proton ${SOURCE_FILES} ${IMGUI_SOURCES})
 
 target_compile_definitions(proton PRIVATE EXPORT_LIB=1)
 
