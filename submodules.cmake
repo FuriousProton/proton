@@ -47,6 +47,10 @@ set(IMGUI_SOURCES ${IMGUI_PATH}/imconfig.h ${IMGUI_PATH}/imgui.cpp ${IMGUI_PATH}
         ${IMGUI_PATH}/libs/gl3w/GL/glcorearb.h
         )
 
+##SIMPLEX
+set(SIMPLEX_PATH ${CMAKE_CURRENT_SOURCE_DIR}/lib/simplex)
+set(SIMPLEX_SOURCES ${SIMPLEX_PATH}/SimplexNoise.cpp ${SIMPLEX_PATH}/SimplexNoise.h)
+
 
 
 #soil

@@ -196,6 +196,7 @@ namespace proton {
     }
 
     void Display::key_callback(int key, int scancode, int action, int mods) {
+#ifdef IMGUI
 
         auto io = ImGui::GetIO();
         if(io.WantTextInput == 1){
@@ -208,16 +209,19 @@ namespace proton {
 
             EventManager::getInstance().fire("INPUT", e);
         }
+#endif
 //        LOG("KEYBOARD", "KEY: " << key << " SCAN: " << scancode << " ACTION: " << action);
     }
 
     void Display::mouse_button_callback(int button, int action, int mods) {
+#ifdef IMGUI
         auto io = ImGui::GetIO();
         if (io.WantCaptureMouse == 1) {
             ImGui_ImplGlfw_MouseButtonCallback(mpWindow, button, action, mods);
         } else {
             Input::getInstance()->setMouseInput(button, GLFW_INPUT_TO_PROTON(action));
         }
+#endif
         //       LOG("MOUSE", "CLICK");
     }
 

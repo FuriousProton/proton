@@ -47,7 +47,7 @@ set(SOURCE_FILES src/interface/display/Display.cpp
 include(submodules.cmake)
 include(cmake/dependencies.cmake)
 
-add_library(proton SHARED ${SOURCE_FILES} ${IMGUI_SOURCES})
+add_library(proton SHARED ${SOURCE_FILES} ${IMGUI_SOURCES} ${SIMPLEX_SOURCES})
 #add_executable(proton ${SOURCE_FILES} ${IMGUI_SOURCES})
 
 target_compile_definitions(proton PRIVATE EXPORT_LIB=1)
