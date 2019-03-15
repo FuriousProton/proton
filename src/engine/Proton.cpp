@@ -5,7 +5,6 @@
 #include "../../include/Proton.h"
 
 #include <glbinding/gl/gl.h>
-#include <GL/gl.h>
 
 #include "../../include/interface/Display.h"
 #include "../../include/Scene.h"

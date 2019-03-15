@@ -9,6 +9,7 @@
 #include <map>
 #include "Component.h"
 #include <glm/gtc/type_ptr.hpp>
+#include <glbinding/gl/gl.h>
 
 namespace proton {
     class Shader;
@@ -24,13 +25,13 @@ namespace proton {
         IndexBuffer* mpIndexBuffer;
         VertexArray* mpVertexArray;
         Texture* mpTexture;
-        unsigned int renderMode;
+        GLenum renderMode;
     public:
         explicit Renderer(const char* shader);
         ~Renderer();
         void setModel(IndexBuffer* ibo, VertexArray* vao);
         void addBuffer(Buffer* buffer, unsigned short location);
-        void setRendeMode(unsigned int renderMode);
+        void setRendeMode(GLenum renderMode);
         void setTexture(Texture* texture);
 
         void set(const char *name, int v);

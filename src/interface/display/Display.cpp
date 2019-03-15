@@ -8,12 +8,14 @@
 #include "../../../include/Proton.h"
 #include "../../../include/CustomEvent.h"
 #include "../../../include/EventManager.h"
-#include "../../../lib/imgui/imgui.h"
-#include "../../../lib/imgui/imgui_impl_glfw_gl3.h"
-#include "../../../lib/imgui/imgui_internal.h"
-#include "../../../lib/imgui/imgui_dock.h"
+
 #include <cmath>
 
+//#ifdef IMGUI
+#include "../../../lib/imgui/imgui.h"
+#include "../../../lib/imgui/imgui_impl_opengl3.h"
+#include "../../../lib/imgui/imgui_impl_glfw.h"
+//#endif
 
 namespace proton {
     Display::Display(int width, int height, const char *title) : mWidth(width), mHeight(height), mTitle(title),
@@ -23,8 +25,11 @@ namespace proton {
     }
 
     Display::~Display() {
-        ImGui_ImplGlfwGL3_Shutdown();
-        ImGui::DestroyContext(mpImGui);
+//#ifdef IMGUI
+        ImGui_ImplOpenGL3_Shutdown();
+        ImGui_ImplGlfw_Shutdown();
+        ImGui::DestroyContext();
+//#endif
         glfwTerminate();
     }
 
@@ -74,50 +79,99 @@ namespace proton {
             static_cast<Display *>(glfwGetWindowUserPointer(w))->window_resize(a, b);
         };
 //
-//        auto monitorcallback = [](GLFWmonitor* monitor, int event) {
+//        auto monitorcallback = [](GLFWmonitor* w, int event) {
 //            static_cast<Display *>(glfwGetWindowUserPointer(w))->window_resize(a, b);
 //        };
 
         auto cursorcallback = [](GLFWwindow *w, double a, double b) {
             static_cast<Display *>(glfwGetWindowUserPointer(w))->cursor_position_callback(a, b);
         };
+#ifdef IMGUI
 
         auto scrollCallback = [](GLFWwindow *w, double x, double y) {
-            ImGui_ImplGlfwGL3_ScrollCallback(w, x, y);
+            ImGui_ImplGlfw_ScrollCallback(w, x, y);
         };
         auto charCallback = [](GLFWwindow *w, unsigned int c) {
-            ImGui_ImplGlfwGL3_CharCallback(w, c);
+            ImGui_ImplGlfw_CharCallback(w, c);
         };
+#endif
 //        glfwSetMonitorCallback(monitorcallback);
         glfwSetMouseButtonCallback(mpWindow, mousecallback);
         glfwSetWindowSizeCallback(mpWindow, winresize);
         glfwSetKeyCallback(mpWindow, keycallback);
         glfwSetCursorPosCallback(mpWindow, cursorcallback);
+#ifdef IMGUI
         glfwSetScrollCallback(mpWindow, scrollCallback);
         glfwSetCharCallback(mpWindow, charCallback);
+#endif
 //VSYNC OFF
         glfwSwapInterval(0);
 //endregion
 #endif
         Proton::errorcheck("after glfwMakeContextCurrent");
-        glbinding::Binding::initialize();
+        glbinding::Binding::initialize(glfwGetProcAddress);
         INFO("after glbinding include");
         EventManager::getInstance().createEvent("CURSOR");
         EventManager::getInstance().createEvent("INPUT");
-        LOG("OpenGL version", glGetString(GL_VERSION));
-        mpImGui = ImGui::CreateContext();
-        ImGui_ImplGlfwGL3_Init(mpWindow, false);
-        ImGui::InitDock();
+//#ifdef IMGUI
 
+        LOG("OpenGL version", glGetString(GL_VERSION));
+        IMGUI_CHECKVERSION();
+        ImGui::CreateContext();
+        ImGuiIO &io = ImGui::GetIO();
+        (void) io;
+        io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls
+        //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+        io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
+        io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Enable Multi-Viewport / Platform Windows
+        //io.ConfigViewportsNoAutoMerge = true;
+        //io.ConfigViewportsNoTaskBarIcon = true;
+
+        mp_IO = io;
+
+        ImGui::StyleColorsDark();
+        // When viewports are enabled we tweak WindowRounding/WindowBg so platform windows can look identical to regular ones.
+        ImGuiStyle &style = ImGui::GetStyle();
+        if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
+            style.WindowRounding = 0.0f;
+            style.Colors[ImGuiCol_WindowBg].w = 1.0f;
+        }
+
+        const char* glsl_version = "#version 130";
+
+//        mpImGui = ImGui::CreateContext();
+        ImGui_ImplGlfw_InitForOpenGL(mpWindow, true);
+        bool ok = ImGui_ImplOpenGL3_Init(glsl_version);
+        std::string r = ok ? "Yes" : "No";
+        LOG("IMGUI created", r);
+//#endif
         INFO("after version");
-        //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
-        //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;   // Enable Gamepad Controls
         return true;
     }
 
 
+    void Display::clear() {
+        glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+        glfwPollEvents();
+        ImGui_ImplOpenGL3_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
+
+    }
+
     void Display::update() {
+        is_first = false;
+//#ifdef IMGUI
         ImGui::Render();
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+        if (mp_IO.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
+            GLFWwindow *backup_current_context = glfwGetCurrentContext();
+            ImGui::UpdatePlatformWindows();
+            ImGui::RenderPlatformWindowsDefault();
+            glfwMakeContextCurrent(backup_current_context);
+        }
+//#endif
         for (std::pair<const int, int> &state : Proton::keyStates) {
             if (state.second == 0) {
                 Proton::keyStates.erase(state.first);
@@ -142,9 +196,10 @@ namespace proton {
     }
 
     void Display::key_callback(int key, int scancode, int action, int mods) {
+
         auto io = ImGui::GetIO();
         if(io.WantTextInput == 1){
-            ImGui_ImplGlfwGL3_KeyCallback(mpWindow,key, scancode, action, mods);
+            ImGui_ImplGlfw_KeyCallback(mpWindow,key, scancode, action, mods);
         }else{
             Proton::keyStates[key] = action;
             KeyEvent *e = new KeyEvent(key, scancode, action, mods);
@@ -153,14 +208,13 @@ namespace proton {
 
             EventManager::getInstance().fire("INPUT", e);
         }
-
 //        LOG("KEYBOARD", "KEY: " << key << " SCAN: " << scancode << " ACTION: " << action);
     }
 
     void Display::mouse_button_callback(int button, int action, int mods) {
         auto io = ImGui::GetIO();
         if (io.WantCaptureMouse == 1) {
-            ImGui_ImplGlfwGL3_MouseButtonCallback(mpWindow, button, action, mods);
+            ImGui_ImplGlfw_MouseButtonCallback(mpWindow, button, action, mods);
         } else {
             Input::getInstance()->setMouseInput(button, GLFW_INPUT_TO_PROTON(action));
         }
@@ -211,12 +265,6 @@ namespace proton {
             const GLFWvidmode *mode = glfwGetVideoMode(mpMonitors[index]);
             glfwSetWindowMonitor(mpWindow, mpMonitors[index], 0, 0, mode->width, mode->height, mode->refreshRate);
         }
-    }
-
-    void Display::clear() {
-        glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
-        glfwPollEvents();
-        ImGui_ImplGlfwGL3_NewFrame();
     }
 
     Input *Display::input() {

@@ -36,8 +36,16 @@ set(CHAI_LIB ${CMAKE_CURRENT_SOURCE_DIR}/temp/chaiscript/libstdlib.a
 set(IMGUI_PATH ${CMAKE_CURRENT_SOURCE_DIR}/lib/imgui)
 set(IMGUI_SOURCES ${IMGUI_PATH}/imconfig.h ${IMGUI_PATH}/imgui.cpp ${IMGUI_PATH}/imgui.h
         ${IMGUI_PATH}/imgui_draw.cpp ${IMGUI_PATH}/imgui_internal.h
-        ${IMGUI_PATH}/imgui_dock.cpp ${IMGUI_PATH}/imgui_dock.h
-        ${IMGUI_PATH}/imgui_impl_glfw_gl3.cpp ${IMGUI_PATH}/imgui_impl_glfw_gl3.h)
+        ${IMGUI_PATH}/imgui_widgets.cpp
+        ${IMGUI_PATH}/imstb_rectpack.h
+        ${IMGUI_PATH}/imstb_textedit.h
+        ${IMGUI_PATH}/imstb_truetype.h
+        ${IMGUI_PATH}/imgui_impl_glfw.h ${IMGUI_PATH}/imgui_impl_glfw.cpp
+        ${IMGUI_PATH}/imgui_impl_opengl3.h ${IMGUI_PATH}/imgui_impl_opengl3.cpp
+
+        ${IMGUI_PATH}/libs/gl3w/GL/gl3w.h ${IMGUI_PATH}/libs/gl3w/GL/gl3w.c
+        ${IMGUI_PATH}/libs/gl3w/GL/glcorearb.h
+        )
 
 
 
@@ -52,14 +60,13 @@ include_directories(
         ${GLM_INCLUDE}
         ${CHAI_INCLUDE}
         ${ASSIMP_INCLUDE}
-        ${SOIL_INCLUDE}
+        lib/stb
 )
 
 set(LINKER
         ${SOIL_LIB}
         ${ASSIMP_LIB}
         ${CHAI_LI}
-        ${SOIL_LIB}
         ${GLFW3_LIBRARY}
         )
 
@@ -68,7 +75,6 @@ if (WIN32)
             -fpermissive
             -static-libstdc++
             -static-libgcc
-            -lSOIL
             -lopengl32
             -lglu32
             glbinding::glbinding
@@ -83,7 +89,6 @@ ELSE ()
             -fpermissive
             -static-libstdc++
             -static-libgcc
-            -lSOIL
             -lGL
             -lGLU
             -lz

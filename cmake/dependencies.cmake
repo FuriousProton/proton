@@ -81,18 +81,18 @@ ExternalProject_Add(glbinding_module
         INSTALL_COMMAND ""
         TEST_COMMAND ""
         )
-
-ExternalProject_Add(soil_module
-    GIT_SUBMODULES "submodule/soil-make"
-    DOWNLOAD_COMMAND git submodule update --recursive
-    UPDATE_COMMAND ""
-    PATCH_COMMAND ""
-    SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/submodule/soil-make"
-    BINARY_DIR "${CMAKE_CURRENT_SOURCE_DIR}/temp/soil"
-    CONFIGURE_COMMAND ""
-
-    BUILD_COMMAND
-    INSTALL_COMMAND ""
-    TEST_COMMAND ""
-  )
-
+#
+#ExternalProject_Add(soil_module
+#    GIT_SUBMODULES "submodule/soil-make"
+#    DOWNLOAD_COMMAND git submodule update --recursive
+#    UPDATE_COMMAND ""
+#    PATCH_COMMAND ""
+#    SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/submodule/soil-make"
+#    BINARY_DIR "${CMAKE_CURRENT_SOURCE_DIR}/temp/soil"
+#    CONFIGURE_COMMAND ""
+#
+#    BUILD_COMMAND
+#    INSTALL_COMMAND ""
+#    TEST_COMMAND ""
+#  )
+#

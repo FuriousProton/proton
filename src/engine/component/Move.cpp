@@ -13,7 +13,7 @@ void proton::Move::start() {
 void proton::Move::update() {
     Component::update();
     if(getKeyDown(KEY_W)){
-        mpEntity->transform().move(glm::vec3(0,0,.1f));
+        mpEntity->transform().move(glm::vec3(0,0,.01f));
     }
 }
 

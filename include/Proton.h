@@ -31,5 +31,6 @@ public:
      */
     bool createDisplay(DisplaySettings &dSettings);
     void cleanUp();
+    proton::Display *getDisplay(){ return mDisplay;}
 };
 

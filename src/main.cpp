@@ -46,10 +46,32 @@ int main()
         auto *e = new Entity();
         auto *r = new Renderer("simple.shader");
         scene->addEntity(c);
+#define IBO_LEN 6
+        unsigned int indexes[IBO_LEN]={
+                0,2,1,
+                1,2,3
+        };
+        IndexBuffer ibo(indexes,IBO_LEN);
+        VertexArray vao;
+#define VBO_LEN 12
+        float vert[VBO_LEN]={
+                0,0,0,
+                100,0,0,
+                0,0, 100,
+                100,0, 100,
+        };
+        Buffer verticles(vert,VBO_LEN,3);
+        vao.addBuffer(&verticles,0);
+        r->setModel(&ibo,&vao);
+        r->setRendeMode(GL_TRIANGLES);
+
+        e->addComponent(r);
 
         c->transform().move(0,5,10);
         e->addComponent(new DemoComponent());
         c->addComponent(new Move());
+        r->set("size", 100);
+//        e->transform().move(glm::vec3(0,2, -1));
       //  e->transform().rotate(glm::vec3(90,0,0));
         scene->addEntity(e);
         c->setCulling(false);

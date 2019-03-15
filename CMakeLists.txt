@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 3.8)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_definitions(-O0)
+#add_definitions(-O0)
 #add_definitions(-pg)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
@@ -36,22 +36,21 @@ set(SOURCE_FILES src/interface/display/Display.cpp
         src/interface/graphics/Texture.cpp include/interface/Texture.h include/CustomEvent.h include/EventManager.h
         src/interface/io/EventManager.cpp include/io/Input.h src/interface/io/Input.cpp include/interface/GUI.h src/interface/GUI.cpp
 
-#        src/main.cpp src/engine/component/DemoComponent.cpp src/engine/component/DemoComponent.h
-#        src/engine/component/Move.cpp
-#        src/engine/component/Move.h
 #        include/io/Resource.h src/interface/io/Resource.cpp include/io/FileSystem.h
         include/config.h
 #        include/entity/Canvas.h
+#        src/main.cpp src/main.cpp src/engine/component/DemoComponent.cpp src/engine/component/DemoComponent.h src/engine/component/Move.cpp src/engine/component/Move.h
+
         )
 
 
 include(submodules.cmake)
 include(cmake/dependencies.cmake)
 
-#add_library(proton SHARED ${SOURCE_FILES} ${IMGUI_SOURCES})
-add_executable(proton ${SOURCE_FILES} ${IMGUI_SOURCES})
+add_library(proton SHARED ${SOURCE_FILES} ${IMGUI_SOURCES})
+#add_executable(proton ${SOURCE_FILES} ${IMGUI_SOURCES})
 
 target_compile_definitions(proton PRIVATE EXPORT_LIB=1)
 
-target_link_libraries(proton ${LINKER} ${ARGUMENTS} )
+target_link_libraries(proton ${LINKER} ${ARGUMENTS})
 

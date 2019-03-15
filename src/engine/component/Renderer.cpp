@@ -51,7 +51,7 @@ namespace proton{
         if(mpTexture){
             mpTexture->bind();
         }
-        glDrawElements(static_cast<GLenum>(renderMode), mpIndexBuffer->getCount(), GL_UNSIGNED_INT, 0);
+        glDrawElements(renderMode, mpIndexBuffer->getCount(), GL_UNSIGNED_INT, 0);
 
         mpShader->unbind();
         if(mpTexture){
@@ -63,7 +63,7 @@ namespace proton{
     }
 
     void Renderer::setModel(IndexBuffer *ibo, VertexArray *vao) {
-        renderMode = (unsigned int) GL_TRIANGLES;
+        renderMode = GL_TRIANGLES;
         mpIndexBuffer = ibo;
         mpVertexArray = vao;
     }
@@ -72,7 +72,7 @@ namespace proton{
         mpVertexArray->addBuffer(buffer,location);
     }
 
-    void Renderer::setRendeMode(unsigned int r) {
+    void Renderer::setRendeMode(GLenum r) {
         renderMode=r;
     }
 
