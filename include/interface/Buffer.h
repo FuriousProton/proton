@@ -11,13 +11,15 @@ namespace proton{
     private:
         unsigned int mBufferId;
         unsigned int mComponentCount;
+        unsigned int mCount;
+        void *mPData;
     public:
         Buffer(const void *data, int count, unsigned int componentCount);
         ~Buffer();
 
         void bind() const;
         void unbind() const;
-
+        unsigned int getCount(){ return mCount;}
         unsigned int getComponentCount();
 
     private:

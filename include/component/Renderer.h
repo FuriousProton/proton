@@ -33,6 +33,8 @@ namespace proton {
         void addBuffer(Buffer* buffer, unsigned short location);
         void setRendeMode(GLenum renderMode);
         void setTexture(Texture* texture);
+        void calculateNormals(unsigned int *indices, int indexLen, float* vertex, int count);
+
 
         void set(const char *name, int v);
         void set(const char *name, float v);

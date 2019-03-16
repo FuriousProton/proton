@@ -13,7 +13,7 @@ namespace proton{
 
     void Buffer::load(const void *data, int count, unsigned int componentCount) {
         mComponentCount = componentCount;
-
+        mCount = count;
         glGenBuffers(1, &mBufferId);
         glBindBuffer(GL_ARRAY_BUFFER, mBufferId);
         glBufferData(GL_ARRAY_BUFFER, count * sizeof(float), data, GL_STATIC_DRAW);
