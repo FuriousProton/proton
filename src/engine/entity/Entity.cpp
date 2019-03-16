@@ -10,7 +10,6 @@
 #include "../../../include/entity/Camera.h"
 #include "../../../include/Scene.h"
 #include "../../../include/Proton.h"
-#include "../../../include/io/Input.h"
 #include "../../../include/interface/Display.h"
 
 
@@ -18,7 +17,6 @@ namespace proton {
 
     Entity::Entity() : mpParent(nullptr) {
         setup();
-        mpInput = Input::getInstance();
     }
 
     void Entity::setup() {
@@ -80,7 +78,4 @@ namespace proton {
         mpChildList.push_back(child);
     }
 
-    Input *Entity::getInput() {
-        return Input::getInstance();
-    }
 }

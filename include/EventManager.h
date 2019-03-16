@@ -1,53 +1,89 @@
-//
-// Created by teeebor on 2017-12-26.
-//
-
 #pragma once
 
+#include <map>
+#include <list>
+#include <typeindex>
 
-#include <vector>
-#include <functional>
-#include "utility.h"
-#include "CustomEvent.h"
+struct PROTON_API Event{};
 
-typedef void (*EventFun)(CustomEvent *,void *);
+struct PROTON_API DisplayEvent : public Event {
+    DisplayEvent(double x, double y): width {x}, height{y} {}
+    double width, height;
+};
 
-struct PROTON_API Subscription {
-    const char *m_Name;
-    std::vector<EventFun> m_Events;
-    std::vector<void *> classes;
 
-    Subscription(const char *name):m_Name(name){}
+// This is the interface for MemberFunctionHandler that each specialization will use
+class PROTON_API HandlerFunctionBase {
+public:
+    // Call the member function
+    void exec(Event *evnt) {
+        call(evnt);
+    }
 
-    const void fire(CustomEvent *e) {
-        for(int i=0;i<m_Events.size();i++){
-            LOG("SUB","CALLING EVENT");
-            m_Events[i](e,classes[i]);
+private:
+    // Implemented by MemberFunctionHandler
+    virtual void call(Event *evnt) = 0;
+};
+
+template<class T, class EventType>
+class PROTON_API MemberFunctionHandler : public HandlerFunctionBase {
+public:
+    typedef void (T::*MemberFunction)(EventType *);
+
+    MemberFunctionHandler(T *instance, MemberFunction memberFunction) : instance{instance},
+                                                                        memberFunction{memberFunction} {};
+
+    void call(Event *evnt) {
+        // Cast event to the correct type and call member function
+        (instance->*memberFunction)(static_cast<EventType *>(evnt));
+    }
+
+private:
+    // Pointer to class instance
+    T *instance;
+
+    // Pointer to member function
+    MemberFunction memberFunction;
+};
+
+typedef std::list<HandlerFunctionBase *> HandlerList;
+
+class PROTON_API EventBus {
+
+public:
+    static EventBus& getInstance() {
+        static EventBus inst;
+        return inst;
+    }
+
+    template<typename EventType>
+    void fire(EventType *evnt) {
+        HandlerList *handlers = subscribers[typeid(EventType)];
+
+        if (handlers == nullptr) {
+            return;
+        }
+
+        for (auto &handler : *handlers) {
+            if (handler != nullptr) {
+                handler->exec(evnt);
+            }
         }
     }
 
-    void addEvent(EventFun callback) {
+    template<class T, class EventType>
+    void subscribe(T *instance, void (T::*memberFunction)(EventType *)) {
+        HandlerList *handlers = subscribers[typeid(EventType)];
 
-        LOG("EVENT","ADDING EVENT");
-        LOG("EVENT",m_Name);
-        m_Events.push_back(callback);
+        //First time initialization
+        if (handlers == nullptr) {
+            handlers = new HandlerList();
+            subscribers[typeid(EventType)] = handlers;
+        }
+
+        handlers->push_back(new MemberFunctionHandler<T, EventType>(instance, memberFunction));
     }
-};
 
-class PROTON_API EventManager {
 private:
-    std::vector<Subscription *> m_Subscription;
-private:
-    EventManager() {}
-
-public:
-    Subscription *getSubscription(const char *name);
-
-    static EventManager &getInstance();
-
-    Subscription *createEvent(const char *name);
-
-    void fire(const char *name, CustomEvent *e);
-
-    bool subscribe(const char *name, EventFun callback, void *classPointer);
+    std::map<std::type_index, HandlerList *> subscribers;
 };

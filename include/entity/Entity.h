@@ -16,7 +16,6 @@ namespace proton{
     protected:
         Entity *mpParent;
         Transform *mpTransform;
-        Input *mpInput;
         virtual void setup();
 
     public:
@@ -29,7 +28,6 @@ namespace proton{
         Transform &transform();
         void addComponent(Component *comp);
         void addChild(Entity *child);
-        Input *getInput();
     };
 
 }

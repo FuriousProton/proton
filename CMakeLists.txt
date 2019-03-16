@@ -33,15 +33,15 @@ set(SOURCE_FILES src/interface/display/Display.cpp
         src/engine/Scene.cpp include/Scene.h src/engine/entity/Camera.cpp include/entity/Camera.h
         src/engine/component/DemoComponent.cpp src/engine/component/DemoComponent.h src/engine/component/Move.cpp
         src/engine/component/Move.h src/interface/graphics/Uniform.cpp include/interface/Uniform.h
-        src/interface/graphics/Texture.cpp include/interface/Texture.h include/CustomEvent.h include/EventManager.h
-        src/interface/io/EventManager.cpp include/io/Input.h src/interface/io/Input.cpp include/interface/GUI.h src/interface/GUI.cpp
+        src/interface/graphics/Texture.cpp include/interface/Texture.h
+        include/interface/GUI.h src/interface/GUI.cpp
 
 #        include/io/Resource.h src/interface/io/Resource.cpp include/io/FileSystem.h
         include/config.h
 #        include/entity/Canvas.h
 #        src/main.cpp src/main.cpp src/engine/component/DemoComponent.cpp src/engine/component/DemoComponent.h src/engine/component/Move.cpp src/engine/component/Move.h
 
-        )
+        include/EventManager.h)
 
 
 include(submodules.cmake)

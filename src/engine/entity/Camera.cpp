@@ -19,7 +19,16 @@ namespace proton {
         if(Scene::activeScene){
             Scene::activeScene->addCamera(this);
         }
+
+        EventBus::getInstance().subscribe(this, &Camera::DisplayChanged);
+
         glEnable(GL_DEPTH_TEST);
+    }
+
+    void Camera::DisplayChanged(DisplayEvent *e){
+        mFrameWidth = e->width;
+        mFrameHeight = e->height;
+        createProjectionMatrix();
     }
 
     glm::mat4 Camera::getViewMatrix() {
@@ -41,6 +50,7 @@ namespace proton {
             glDisable(GL_CULL_FACE);
         }
     }
+
 
     void Camera::setBlend(bool enabled) {
         if (enabled) {

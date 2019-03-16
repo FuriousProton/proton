@@ -5,7 +5,6 @@
 #pragma once
 
 #include "../utility.h"
-#include "../io/Input.h"
 #include <ctime>
 #include "../../lib/imgui/imgui.h"
 
@@ -21,7 +20,6 @@ namespace proton {
         GLFWwindow *mpWindow;
         GLFWmonitor **mpMonitors;
         ImGuiContext *mpImGui;
-        Input *mpInput;
         int monitorCount;
         int activeMonitor;
 
@@ -41,7 +39,6 @@ namespace proton {
 
         void update();
 
-        Input *input();
 
         bool closed();
 

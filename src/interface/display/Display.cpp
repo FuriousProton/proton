@@ -6,7 +6,6 @@
 #include "../../../include/interface/Display.h"
 #include <GLFW/glfw3.h>
 #include "../../../include/Proton.h"
-#include "../../../include/CustomEvent.h"
 #include "../../../include/EventManager.h"
 
 #include <cmath>
@@ -20,7 +19,6 @@
 namespace proton {
     Display::Display(int width, int height, const char *title) : mWidth(width), mHeight(height), mTitle(title),
                                                                  mpWindow(nullptr) {
-        mpInput = Input::getInstance();
         updateTime();
     }
 
@@ -111,8 +109,7 @@ namespace proton {
         Proton::errorcheck("after glfwMakeContextCurrent");
         glbinding::Binding::initialize(glfwGetProcAddress);
         INFO("after glbinding include");
-        EventManager::getInstance().createEvent("CURSOR");
-        EventManager::getInstance().createEvent("INPUT");
+
 //#ifdef IMGUI
 
         LOG("OpenGL version", glGetString(GL_VERSION));
@@ -177,7 +174,6 @@ namespace proton {
                 Proton::keyStates.erase(state.first);
             }
         }
-        mpInput->update();
         glFlush();
         glfwSwapBuffers(mpWindow);
         updateTime();
@@ -189,10 +185,9 @@ namespace proton {
     }
 
     void Display::cursor_position_callback(double xpos, double ypos) {
-        MoveEvent *e = new MoveEvent(xpos, ypos);
+//        MoveEvent *e = new MoveEvent(xpos, ypos);
 //        LOG("Cursor", xpos<<" "<<ypos);
-        EventManager::getInstance().fire("CURSOR", e);
-        Input::getInstance()->setMouse(xpos, ypos);
+//        EventManager::getInstance().fire("CURSOR", e);
     }
 
     void Display::key_callback(int key, int scancode, int action, int mods) {
@@ -227,6 +222,10 @@ namespace proton {
 
     void Display::window_resize(int width, int height) {
         resize(width, height);
+//        auto *e = new DisplayEvent(width, height);
+//
+//        EventManager::getInstance().fire("RESIZE", e);
+
         //     LOG("WINDOW", "RESIZE WIDTH: " << width << "; HEIGHT: " << height);
     }
 
@@ -235,8 +234,7 @@ namespace proton {
     }
 
     void Display::resize(int width, int height) {
-        mWidth = width;
-        mHeight = height;
+        EventBus::getInstance().fire(new DisplayEvent(width,height));
         glViewport(0, 0, width, height);
     }
 
@@ -271,9 +269,6 @@ namespace proton {
         }
     }
 
-    Input *Display::input() {
-        return mpInput;
-    }
 
     double Display::FrameTime() {
         return frameTime;

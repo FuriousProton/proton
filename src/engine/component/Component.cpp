@@ -5,7 +5,6 @@
 #include "../../../include/component/Component.h"
 #include "../../../include/Proton.h"
 #include "../../../include/Scene.h"
-#include "../../../include/io/Input.h"
 
 namespace proton {
     void Component::update() {
@@ -46,14 +45,6 @@ namespace proton {
         return false;
     }
 
-    BaseInput *Component::Input(int input) {
-        return mpEntity->getInput()->Get(input);
-    }
-
-    MouseMove Component::Cursor() {
-        return mpEntity->getInput()->Cursor();
-    }
-
     double Component::Time() {
         if (Scene::activeScene) {
             return Scene::activeScene->frameTime();
@@ -61,7 +52,4 @@ namespace proton {
         return 0;
     }
 
-    BaseInput *Component::MouseButton(int key) {
-        return mpEntity->getInput()->GetMouseButton(key);
-    }
 }
