@@ -178,7 +178,7 @@ namespace proton {
                     }
                     int textureID = mesh->mMaterialIndex;
                     if (textureID >= 0 && textureID < _scene->mNumTextures) {
-                        r->setTexture(textures[textureID]);
+                        r->addTexture(textures[textureID]);
                         Proton::errorcheck("texture_load");
                     }
                     r->setModel(ibo, vao);

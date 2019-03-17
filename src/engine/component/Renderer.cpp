@@ -22,7 +22,6 @@ namespace proton {
 
     Renderer::Renderer(const char *shader) : Component() {
         mpShader = FileLoader::readShader(shader);
-        mpTexture = nullptr;
     }
 
     Renderer::~Renderer() {
@@ -49,14 +48,14 @@ namespace proton {
         loadData();
         mpVertexArray->bind();
         mpIndexBuffer->bind();
-        if (mpTexture) {
-            mpTexture->bind();
+        for(auto t : mpTextures){
+            t->bind();
         }
         glDrawElements(renderMode, mpIndexBuffer->getCount(), GL_UNSIGNED_INT, 0);
 
         mpShader->unbind();
-        if (mpTexture) {
-            mpTexture->unbind();
+        for(auto t : mpTextures){
+            t->unbind();
         }
 
         mpVertexArray->unbind();
@@ -108,9 +107,17 @@ namespace proton {
         mUniforms[name] = new UniformMat4(name, mpShader, v);
     }
 
-    void Renderer::setTexture(Texture *texture) {
-        mpTexture = texture;
+    void Renderer::setTexture(Texture *texture, int index) {
+        if(mpTextures.size()<index){
+            mpTextures[index] = texture;
+        }
     }
+    int Renderer::addTexture(Texture *texture){
+        int id = mpTextures.size();
+        mpTextures.push_back(texture);
+        return id;
+    }
+
 
     void Renderer::calculateNormals(unsigned int *indices, int indexLen, float* vertex, int count) {
         using namespace glm;
