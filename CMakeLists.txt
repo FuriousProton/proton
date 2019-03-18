@@ -31,8 +31,7 @@ set(SOURCE_FILES src/interface/display/Display.cpp
         src/interface/graphics/IndexBuffer.cpp include/interface/IndexBuffer.h
         src/interface/graphics/VertexArray.cpp include/interface/VertexArray.h
         src/engine/Scene.cpp include/Scene.h src/engine/entity/Camera.cpp include/entity/Camera.h
-        src/engine/component/DemoComponent.cpp src/engine/component/DemoComponent.h src/engine/component/Move.cpp
-        src/engine/component/Move.h src/interface/graphics/Uniform.cpp include/interface/Uniform.h
+        src/interface/graphics/Uniform.cpp include/interface/Uniform.h
         src/interface/graphics/Texture.cpp include/interface/Texture.h
         include/interface/GUI.h src/interface/GUI.cpp
 
@@ -41,7 +40,7 @@ set(SOURCE_FILES src/interface/display/Display.cpp
 #        include/entity/Canvas.h
 #        src/main.cpp src/main.cpp src/engine/component/DemoComponent.cpp src/engine/component/DemoComponent.h src/engine/component/Move.cpp src/engine/component/Move.h
 
-        include/EventManager.h)
+        include/EventManager.h include/io/InputManager.h src/interface/io/InputManager.cpp)
 
 
 include(submodules.cmake)

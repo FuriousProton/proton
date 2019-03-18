@@ -7,6 +7,7 @@
 #include <GLFW/glfw3.h>
 #include "../../../include/Proton.h"
 #include "../../../include/EventManager.h"
+#include "../../../include/io/InputManager.h"
 
 #include <cmath>
 
@@ -191,21 +192,28 @@ namespace proton {
     }
 
     void Display::key_callback(int key, int scancode, int action, int mods) {
-#ifdef IMGUI
-
-        auto io = ImGui::GetIO();
-        if(io.WantTextInput == 1){
-            ImGui_ImplGlfw_KeyCallback(mpWindow,key, scancode, action, mods);
-        }else{
-            Proton::keyStates[key] = action;
-            KeyEvent *e = new KeyEvent(key, scancode, action, mods);
-
-            Input::getInstance()->setInput(key, GLFW_INPUT_TO_PROTON(action));
-
-            EventManager::getInstance().fire("INPUT", e);
+        auto Input = InputManager::getInstance();
+        switch (action){
+            case GLFW_RELEASE:
+                Input->setKeyReleased(key, true);
+                Input->setKeyDown(key, false);
+                Input->setKeyPressed(key, false);
+//                LOG("KEYBOARD", "KEY: " << key << " SCAN: " << scancode << " ACTION: RELEASE");
+                break;
+            case GLFW_PRESS:
+                Input->setKeyReleased(key, false);
+                Input->setKeyDown(key, false);
+                Input->setKeyPressed(key, true);
+//                LOG("KEYBOARD", "KEY: " << key << " SCAN: " << scancode << " ACTION: PRESS");
+                break;
+            case GLFW_REPEAT:
+                Input->setKeyReleased(key, false);
+                Input->setKeyDown(key, true);
+                Input->setKeyPressed(key, false);
+//                LOG("KEYBOARD", "KEY: " << key << " SCAN: " << scancode << " ACTION: DOWN");
+                break;
         }
-#endif
-//        LOG("KEYBOARD", "KEY: " << key << " SCAN: " << scancode << " ACTION: " << action);
+
     }
 
     void Display::mouse_button_callback(int button, int action, int mods) {
@@ -279,4 +287,6 @@ namespace proton {
         frameTime = (double) (now - time) / CLOCKS_PER_SEC;
         time = now;
     }
+
+
 }
