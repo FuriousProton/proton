@@ -135,7 +135,7 @@ namespace proton {
             style.Colors[ImGuiCol_WindowBg].w = 1.0f;
         }
 
-        const char* glsl_version = "#version 130";
+        const char *glsl_version = "#version 130";
 
 //        mpImGui = ImGui::CreateContext();
         ImGui_ImplGlfw_InitForOpenGL(mpWindow, true);
@@ -159,7 +159,6 @@ namespace proton {
 
     void Display::update() {
         is_first = false;
-//#ifdef IMGUI
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
@@ -169,12 +168,12 @@ namespace proton {
             ImGui::RenderPlatformWindowsDefault();
             glfwMakeContextCurrent(backup_current_context);
         }
-//#endif
         for (std::pair<const int, int> &state : Proton::keyStates) {
             if (state.second == 0) {
                 Proton::keyStates.erase(state.first);
             }
         }
+        InputManager::getInstance()->update();
         glFlush();
         glfwSwapBuffers(mpWindow);
         updateTime();
@@ -186,14 +185,21 @@ namespace proton {
     }
 
     void Display::cursor_position_callback(double xpos, double ypos) {
-//        MoveEvent *e = new MoveEvent(xpos, ypos);
-//        LOG("Cursor", xpos<<" "<<ypos);
-//        EventManager::getInstance().fire("CURSOR", e);
+        auto Input = InputManager::getInstance();
+        auto io = ImGui::GetIO();
+        Input->setPointer(POINTER_MOUSE, xpos, ypos);
     }
 
     void Display::key_callback(int key, int scancode, int action, int mods) {
+        auto io = ImGui::GetIO();
+        if(io.WantCaptureKeyboard != 1){
+            setButton(key, action);
+        }
+
+    }
+    void Display::setButton(int key, int action){
         auto Input = InputManager::getInstance();
-        switch (action){
+        switch (action) {
             case GLFW_RELEASE:
                 Input->setKeyReleased(key, true);
                 Input->setKeyDown(key, false);
@@ -213,28 +219,17 @@ namespace proton {
 //                LOG("KEYBOARD", "KEY: " << key << " SCAN: " << scancode << " ACTION: DOWN");
                 break;
         }
-
     }
 
     void Display::mouse_button_callback(int button, int action, int mods) {
-#ifdef IMGUI
         auto io = ImGui::GetIO();
-        if (io.WantCaptureMouse == 1) {
-            ImGui_ImplGlfw_MouseButtonCallback(mpWindow, button, action, mods);
-        } else {
-            Input::getInstance()->setMouseInput(button, GLFW_INPUT_TO_PROTON(action));
+        if (io.WantCaptureMouse != 1) {
+            setButton(button, action);
         }
-#endif
-        //       LOG("MOUSE", "CLICK");
     }
 
     void Display::window_resize(int width, int height) {
         resize(width, height);
-//        auto *e = new DisplayEvent(width, height);
-//
-//        EventManager::getInstance().fire("RESIZE", e);
-
-        //     LOG("WINDOW", "RESIZE WIDTH: " << width << "; HEIGHT: " << height);
     }
 
     void Display::setCursor(bool enabled) {
@@ -242,7 +237,7 @@ namespace proton {
     }
 
     void Display::resize(int width, int height) {
-        EventBus::getInstance().fire(new DisplayEvent(width,height));
+        EventBus::getInstance().fire(new DisplayEvent(width, height));
         glViewport(0, 0, width, height);
     }
 

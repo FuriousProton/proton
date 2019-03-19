@@ -40,8 +40,12 @@ void InputManager::update() {
     //TODO: add key state reset
 }
 
-void InputManager::setPointer(int key, double x, double y) {
-
+void InputManager::setPointer(int index, double x, double y) {
+    auto p = getOrCreatePointer(index);
+    p->distance.x = x - p->pos.x;
+    p->distance.y = y - p->pos.y;
+    p->pos.x = x;
+    p->pos.y = y;
 }
 
 void InputManager::setKeyPressed(int key, bool pressed) {

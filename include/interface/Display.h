@@ -75,6 +75,7 @@ namespace proton {
     private:
 
         void updateTime();
+        void setButton(int key, int action);
 
         void window_resize(int width, int height);
 
